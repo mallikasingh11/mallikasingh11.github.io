@@ -74,14 +74,9 @@
 <script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
 
 
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
+<p>My dataset is about cardiovascular disease and cardiovascular health of various people. In this project I am looking into what affects whether or not a person has cardiovascular disease or whether or not a person is at risk for cardiovascular disease. The data is measuring 12 different aspects of a person; they are listed below.</p>
 <p>install.packages(“tidyverse”)
 install.packages(“dplyr”)</p>
-<p>Part 0
-My dataset is about cardiovascular disease and cardiovascular health of various people. In this project I am looking into what affects whether or not a person has cardiovascular disease or whether or not a person is at risk for cardiovascular disease. The data is measuring 12 different aspects of a person; they are listed below.</p>
 <p>Age | Objective Feature | age | int (days)
 Height | Objective Feature | height | int (cm) |
 Weight | Objective Feature | weight | float (kg) |
@@ -348,7 +343,7 @@ samp_distn&lt;-replicate(100, {
 ## Estimated SEs
 samp_distn%&gt;%t%&gt;%as.data.frame%&gt;%summarize_all(sd)</code></pre>
 <pre><code>##   (Intercept)     gluc_c       weight gluc_c:weight
-## 1  0.01182772 0.02386209 0.0001596462  0.0002862749</code></pre>
+## 1    0.011813 0.02809525 0.0001621988  0.0003565136</code></pre>
 <p>After resampling the rows, the standard errors decreased by quite lot.</p>
 <p>Part 5</p>
 <pre class="r"><code># Logistic regression model predicting a binary variable (cardio) from two explanatory variables (cholesterol and weight)
@@ -629,7 +624,6 @@ for(i in 1:k){
 <pre><code>##      acc sens spec    ppv        f1       auc
 ## 1 0.4997    1    0 0.4997 0.6663813 0.6079853</code></pre>
 <p>As indicated above, my glmnet plot was not meaningful. The only value that was lasso selected was cardio_catyes which is when the person had a cardiovascular disease. The area under the curve for the first plot was 0.7849059. When plotting the log Lambda against the coefficients, the area under the curve was 0.6079853. When comparing the model’s out-of-sample AUC to that of my logistic regressions above, the areas under the curve are very similar with values of 0.6080042 and 0.6079853.</p>
-</div>
 
             
         <hr>         <div class="related-posts">

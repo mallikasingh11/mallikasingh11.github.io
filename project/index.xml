@@ -13,8 +13,9 @@
       <pubDate>Sun, 22 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>/project/project2/</guid>
-      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
-When you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</description>
+      <description>My dataset is about cardiovascular disease and cardiovascular health of various people. In this project I am looking into what affects whether or not a person has cardiovascular disease or whether or not a person is at risk for cardiovascular disease. The data is measuring 12 different aspects of a person; they are listed below.
+install.packages(“tidyverse”) install.packages(“dplyr”)
+Age | Objective Feature | age | int (days) Height | Objective Feature | height | int (cm) | Weight | Objective Feature | weight | float (kg) | Gender | Objective Feature | gender | categorical code | Systolic blood pressure | Examination Feature | ap_hi | int | Diastolic blood pressure | Examination Feature | ap_lo | int | Cholesterol | Examination Feature | cholesterol | 1: normal, 2: above normal, 3: well above normal | Glucose | Examination Feature | gluc | 1: normal, 2: above normal, 3: well above normal | Smoking | Subjective Feature | smoke | binary | Alcohol intake | Subjective Feature | alco | binary | Physical activity | Subjective Feature | active | binary | Presence or absence of cardiovascular disease | Target Variable | cardio | binary |</description>
     </item>
     
     <item>
@@ -23,8 +24,9 @@ When you click the Knit button a document will be generated that includes both c
       <pubDate>Thu, 22 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>/project/project1/</guid>
-      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
-When you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</description>
+      <description>This project takes a look at the statistics of police shootings and victims of police brutality. I am putting together two datasets to go over similarities and find general locations and ethnicities in those various locations to understand where police brutality is more common.
+install.packages(“tidyverse”) install.packages(“dplyr”) install.packages(“fivethirtyeight”)
+library(tidyverse) ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ── ## ✓ ggplot2 3.3.2 ✓ purrr 0.3.4 ## ✓ tibble 3.0.4 ✓ dplyr 1.</description>
     </item>
     
   </channel>

@@ -9,17 +9,11 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+My dataset is about cardiovascular disease and cardiovascular health of various people. In this project I am looking into what affects whether or not a person has cardiovascular disease or whether or not a person is at risk for cardiovascular disease. The data is measuring 12 different aspects of a person; they are listed below. 
 
 install.packages("tidyverse")
 install.packages("dplyr")
-
-Part 0
-My dataset is about cardiovascular disease and cardiovascular health of various people. In this project I am looking into what affects whether or not a person has cardiovascular disease or whether or not a person is at risk for cardiovascular disease. The data is measuring 12 different aspects of a person; they are listed below. 
 
 Age | Objective Feature | age | int (days)
 Height | Objective Feature | height | int (cm) |

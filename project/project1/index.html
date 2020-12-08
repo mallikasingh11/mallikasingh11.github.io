@@ -74,10 +74,7 @@
 <script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
 
 
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
+<p>This project takes a look at the statistics of police shootings and victims of police brutality. I am putting together two datasets to go over similarities and find general locations and ethnicities in those various locations to understand where police brutality is more common.</p>
 <p>install.packages(“tidyverse”)
 install.packages(“dplyr”)
 install.packages(“fivethirtyeight”)</p>
@@ -567,7 +564,6 @@ pamclust%&gt;%ggplot(aes(state_fp, college, color=cluster))+geom_point() #visual
 <p>Dimensionality Reduction Summary</p>
 <p>The first plot uses k-means clustering to form three clusters of the share_black values. The clusters are plotted against the state_fp variable which is the state code. Three clusters were chosen because it minimized the difference between the variance of the values. The second plot displays three clusters of the various ages of the gunshot victims. The ages ranged from 16 to 87 and are plotted against the state code once again. As one can tell, the mix of ages were relatively similar across all 50 states. The third plot maps the college attendance rates across each state. It contains three clusters which also indicate that college attendance rates were relatively similar across the 50 states with a few outliers in each cluster category.</p>
 <p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
-</div>
 
             
         <hr>         <div class="related-posts">
