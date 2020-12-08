@@ -8,25 +8,12 @@
     <language>en-US</language>
     <lastBuildDate>Mon, 07 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Test python post</title>
+      <title>The Beauty of Reticulate</title>
       <link>/post/2020/12/07/test-python-post/</link>
       <pubDate>Mon, 07 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/2020/12/07/test-python-post/</guid>
-      <description>  Heading of my post! Content of my post!
-#Subheading
-More content
-print(&amp;#39;hello, I am printing this using python&amp;#39;) ## hello, I am printing this using python  </description>
-    </item>
-    
-    <item>
-      <title>New post</title>
-      <link>/post/2020/12/03/new-post/</link>
-      <pubDate>Thu, 03 Dec 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/post/2020/12/03/new-post/</guid>
-      <description>Hello this is my first blog post on this site. xoxo gossip girl. Link to project 1
-Link to google</description>
+      <description>Using R and Python Together! A very handy use of RStudio is that Python can be run in it rather than needing another platform to run python in. To do so, you will need to install the package: reticulate in R. This is what R uses to communicate back and forth with python. Without this package, nothing written in a python code block will run. An example has been included for your benefit below.</description>
     </item>
     
     <item>
@@ -67,7 +54,17 @@ When you click the Knit button a document will be generated that includes both c
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/resume/</guid>
-      <description>   </description>
+      <description>Mallika Singh Contact Information  mallika12@gmail.com 4087170811 mallikasingh11.github.io For further information, please contact me by email.   Education The University of Texas at Austin
+College of Natural Sciences, Computational Biology
+Expected Graduation: 2022
+ Experience Insomnia Cookies
+Baker
+• Paid position; $11.25 per hour
+• Working 15*20 hours per week
+• Job description includes working as a cashier and baker
+Insight Education
+Proctor
+• Paid position; $13.50/hour</description>
     </item>
     
   </channel>

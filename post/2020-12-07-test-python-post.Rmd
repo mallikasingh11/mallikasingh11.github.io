@@ -1,21 +1,36 @@
 ---
-title: Test python post
+title: The Beauty of Reticulate
 author: Mallika Singh
 date: '2020-12-07'
 slug: test-python-post
 categories: []
-tags: []
+tags: [python, R, CS]
 description: ''
 ---
 
-# Heading of my post!
+# Using R and Python Together!
 
-Content of my post!
+A very handy use of RStudio is that Python can be run in it rather than needing another platform to run python in. 
+To do so, you will need to install the package: reticulate in R. This is what R uses to communicate back and forth with python. Without this package, nothing written in a python code block will run. An example has been included for your benefit below. 
 
-#Subheading
+# Reticulate Example
 
-More content
+
+
+```{R}
+library(reticulate)
+r_words <- "This was written in an R chunk and it'll be printed out below in the python chunk."
+```
+
+As written above, this string will be run using a python chunk even though it was written in an R chunk. Pretty cool stuff!
 
 ```{python}
-print('hello, I am printing this using python')
+p_words = "Look! The chunk of r code executed with python thanks to reticulate right below this!"
+
+print(p_words)
+print(r.r_words)
+
 ```
+
+Thanks to reticulate, this will no longer be you :)
+![](/post/2020-12-07-test-python-post_files/Screen Shot 2020-12-07 at 7.29.57 PM.png)

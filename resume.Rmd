@@ -6,5 +6,54 @@ hiderelated: true
 hidediscus: true
 ---
 
-<iframe src="resume.pdf" width="100%" height="800" border="0"></iframe>
+# **Mallika Singh**
+
+
+#### **Contact Information**
+* mallika12@gmail.com
+* 408*717*0811
+* mallikasingh11.github.io
+* For further information, please contact me by email.
+
+***
+
+#### **Education**
+**The University of Texas at Austin**  
+College of Natural Sciences, Computational Biology  
+Expected Graduation: 2022
+
+***
+
+#### **Experience**
+**Insomnia Cookies**  
+*Baker*  
+• Paid position; $11.25 per hour  
+• Working 15*20 hours per week  
+• Job description includes working as a cashier and baker  
+
+**Insight Education**  
+*Proctor*  
+• Paid position; $13.50/hour  
+• Worked 4 hour shifts as needed by the team  
+
+**The Stanford Daily Publication**  
+*Opinion Writer*  
+• Wrote numerous stories for the online summer publication as an intern  
+• Collaborated with other Stanford students on publishing material  
+• Communicated with Stanford faculty through in*person interviews  
+• Furthered my writing skills through various rounds of edits before publishing  
+
+**The Daily Texan Publication**  
+*Columnist*  
+• Wrote biweekly articles for the Opinion section of the Daily Texan  
+• Collaborated directly with the Editor in Chief when coming up with story pitches  
+• Improved upon writing and communication skills through weekly meetings to discuss story ideas  
+
+***
+
+##### **Skills**
+• Good time management and organization skills  
+• Experience in writing reports and articles  
+• Attention to detail  
+
 

@@ -7,7 +7,7 @@
     <meta name="author" content="Mallika Singh" />
     
     <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
-    <title>Test python post</title>
+    <title>The Beauty of Reticulate</title>
     <meta name="generator" content="Hugo 0.79.0" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
@@ -54,7 +54,7 @@
       <div class="container">
         <div class="blog-post">
           <h3>
-            <strong><a href="/post/2020/12/07/test-python-post/">Test python post</a></strong>
+            <strong><a href="/post/2020/12/07/test-python-post/">The Beauty of Reticulate</a></strong>
           </h3>
         </div>
  
@@ -62,6 +62,12 @@
           <h4>
          December 7, 2020 
             &nbsp;&nbsp;
+            
+            <span class="label label-success">python</span>
+            
+            <span class="label label-success">R</span>
+            
+            <span class="label label-success">CS</span>
             
           </h4>
         </div>
@@ -74,13 +80,24 @@
 <script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
 
 
-<div id="heading-of-my-post" class="section level1">
-<h1>Heading of my post!</h1>
-<p>Content of my post!</p>
-<p>#Subheading</p>
-<p>More content</p>
-<pre class="python"><code>print(&#39;hello, I am printing this using python&#39;)</code></pre>
-<pre><code>## hello, I am printing this using python</code></pre>
+<div id="using-r-and-python-together" class="section level1">
+<h1>Using R and Python Together!</h1>
+<p>A very handy use of RStudio is that Python can be run in it rather than needing another platform to run python in.
+To do so, you will need to install the package: reticulate in R. This is what R uses to communicate back and forth with python. Without this package, nothing written in a python code block will run. An example has been included for your benefit below.</p>
+</div>
+<div id="reticulate-example" class="section level1">
+<h1>Reticulate Example</h1>
+<pre class="r"><code>library(reticulate)
+r_words &lt;- &quot;This was written in an R chunk and it&#39;ll be printed out below in the python chunk.&quot;</code></pre>
+<p>As written above, this string will be run using a python chunk even though it was written in an R chunk. Pretty cool stuff!</p>
+<pre class="python"><code>p_words = &quot;Look! The chunk of r code executed with python thanks to reticulate right below this!&quot;
+
+print(p_words)</code></pre>
+<pre><code>## Look! The chunk of r code executed with python thanks to reticulate right below this!</code></pre>
+<pre class="python"><code>print(r.r_words)</code></pre>
+<pre><code>## This was written in an R chunk and it&#39;ll be printed out below in the python chunk.</code></pre>
+<p>Thanks to reticulate, this will no longer be you :)
+<img src="/post/2020-12-07-test-python-post_files/Screen%20Shot%202020-12-07%20at%207.29.57%20PM.png" /></p>
 </div>
 
             
