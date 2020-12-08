@@ -1,0 +1,313 @@
+---
+title: "SDS 348 Project 2"
+author: "Mallika Singh"
+date: "2020-11-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+install.packages("tidyverse")
+install.packages("dplyr")
+
+Part 0
+My dataset is about cardiovascular disease and cardiovascular health of various people. In this project I am looking into what affects whether or not a person has cardiovascular disease or whether or not a person is at risk for cardiovascular disease. The data is measuring 12 different aspects of a person; they are listed below. 
+
+Age | Objective Feature | age | int (days)
+Height | Objective Feature | height | int (cm) |
+Weight | Objective Feature | weight | float (kg) |
+Gender | Objective Feature | gender | categorical code |
+Systolic blood pressure | Examination Feature | ap_hi | int |
+Diastolic blood pressure | Examination Feature | ap_lo | int |
+Cholesterol | Examination Feature | cholesterol | 1: normal, 2: above normal, 3: well above normal |
+Glucose | Examination Feature | gluc | 1: normal, 2: above normal, 3: well above normal |
+Smoking | Subjective Feature | smoke | binary |
+Alcohol intake | Subjective Feature | alco | binary |
+Physical activity | Subjective Feature | active | binary |
+Presence or absence of cardiovascular disease | Target Variable | cardio | binary |
+
+Part 1
+
+Null Hypothesis: For each response variable, the means of all groups are equal.
+Alternative Hypothesis: For at least 1 response variable, at least 1 group mean differs.
+
+
+This dataset includes multiple people who have/do not have heart diseases and their bodily statistics shown above. 
+
+Part 1: MANOVA TEST
+```{r}
+library(tidyverse)
+library(dplyr)
+
+cardio_train <- read.csv('cardio_train.csv')
+cardio_train <- cardio_train %>% as.data.frame()
+
+cardio_train <- cardio_train %>% separate(id.age.gender.height.weight.ap_hi.ap_lo.cholesterol.gluc.smoke.alco.active.cardio, c('id', 'age', 'gender', 'height', 'weight', 'x', 'ap_hi', 'ap_lo', 'cholesterol', 'gluc', 'smoke', 'alco', 'active', 'cardio'))
+
+cardio_train <- cardio_train %>% select(-x)
+cardio_train <- lapply(cardio_train, function(x) as.numeric(as.character(x))) %>% as.data.frame()
+head(cardio_train)
+
+disease <- cardio_train %>% mutate(age = age/365) %>% round()
+disease<-disease%>%mutate(cardio_cat=ifelse(disease$cardio==1,'yes','no'))
+
+head(disease)
+
+man1 <- manova(cbind(cholesterol, weight) ~ cardio_cat, data = disease)
+summary(man1)
+
+summary.aov(man1)
+pairwise.t.test(disease$cholesterol,disease$cardio_cat, p.adj="none")
+pairwise.t.test(disease$weight,disease$cardio_cat, p.adj="none")
+
+
+```
+The low p-value suggests that at least one person with cardiovascular disease differs from at least one response variable. When getting the univariate ANOVA results, it is seen that both response variables are significant. The assumptions of MANOVA are hefty as they include random samples, multivariate normality of dependent variables, homogeneity of within-group co-variance matrices, linear relationships among dependent variables, no extreme univariate or multivariate outliers and no multicollinearity. Based purely on the data I am using, I would think that not every assumption has been met. I felt that there were likely no outliers and that this is a random sample. I performed five total tests: the MANOVA, and the two ANOVAS and the two pairwise tests, in which both p-values were significant. Using the Bonferroni test, the new p-value would be 0.05/5 = 0.01. Even then, all the values are significant. 
+
+Null Hypothesis: Cholesterol level for females is the same as for males
+Alternative Hypothesis: Cholesterol level for females is different than for males. 
+
+Part 2: Randomization Test
+```{R}
+head(disease) 
+disease%>%group_by(gender)%>%summarize(means=mean(cholesterol))%>%summarize(`mean_diff`=diff(means))
+
+rand_dist<-vector() #create vector to hold diffs under null hypothesis
+
+for(i in 1:500){
+  new<-data.frame(cholest=sample(disease$cholesterol),gend=disease$gender) #scramble columns
+  rand_dist[i]<-mean(new[new$gend==1,]$cholest)-mean(new[new$gend==2,]$cholest)}
+
+{hist(rand_dist,main="",ylab=""); abline(v = c(-0.05110232, 0.05110232),col="red")}
+
+mean(rand_dist>0.05110232	| rand_dist< -0.05110232)
+
+```
+For this randomization test, the null hypothesis was that cholesterol levels for females are the same as men. The alternative hypothesis was that cholesterol levels for females are different than for men. The mean difference between the two was -0.05110232. Based on the histogram, the randomization test shows that the data looks relatively normal.
+
+Part 3
+```{R}
+library(sandwich)
+library(lmtest)
+# Mean centering the numeric variable: cholesterol
+
+disease<-disease%>%mutate(gluc_c=disease$gluc-mean(disease$gluc))
+
+head(disease)
+
+# Linear regression: predicted value of cholesterol from glucose and weight
+fit <- lm(cholesterol ~ gluc_c * weight, data = disease)
+summary(fit)
+
+disease %>% mutate(fits=predict(fit))%>% #get predicted values
+  ggplot(aes(cholesterol,weight,color=gluc_c))+geom_point()+geom_line(aes(y=fits))
+
+coeftest(fit, vcov = vcovHC(fit))
+
+# Checking Assumptions
+
+# Linearity
+resids<-fit$residuals; fitvals<-fit$fitted.values
+ggplot()+geom_point(aes(fitvals,resids))+geom_hline(yintercept=0, col="red")
+
+# Homoskedascity
+bptest(fit)
+```
+In Part 3, I run a linear regression to predict the cholesterol level based on a person's weight and gender. The intercept is the predicted value of cholesterol when a person's weight is zero and glucose level is 1. The estimate for 'gluc' is the slope for glucose on cholesterol while controlling for weight. The estimate for weight is the slope for weight on cholesterol while controlling for glucose. The estimate for 'gluc_c:weight' is also significant as it is the interaction between glucose and weight and its effect on cholesterol. It seems as though assumptions for homoskedascity and linearity have not been met with this data. After using robust standard errors, the results look relatively similar as everything is still significant. 
+
+Part 4
+```{R}
+fit2 <- lm(cholesterol ~ gluc_c * weight, data = disease)
+summary(fit2)
+
+disease %>% summarize_all(sd)
+
+boot_dat<-disease[sample(nrow(disease),replace=TRUE),]
+
+
+samp_distn<-replicate(100, {
+  boot_dat<-boot_dat<-disease[sample(nrow(disease),replace=TRUE),]
+  fit<-lm(cholesterol ~ gluc_c * weight, data=boot_dat)
+  coef(fit)
+})
+
+## Estimated SEs
+samp_distn%>%t%>%as.data.frame%>%summarize_all(sd)
+
+```
+
+After resampling the rows, the standard errors decreased by quite lot. 
+
+Part 5
+```{R}
+# Logistic regression model predicting a binary variable (cardio) from two explanatory variables (cholesterol and weight)
+fit2 <- glm(cardio ~ cholesterol+weight, data=disease, family = "binomial")
+coeftest(fit2)
+
+coef(fit2)%>%exp%>%round(5)%>%data.frame
+
+probs<-predict(fit2,type="response") #get predicted probs from the model
+
+#let's use .5 as our threshold for predicting malignant
+table(predict=as.numeric(probs>0.5),truth=disease$cardio)%>%addmargins
+
+# Sensitivity (TPR)
+tpr <- 17512/34979
+
+# Specificity (TNR)
+tnr <- 25277/35021
+
+# Precision (PPV)
+ ppv <- 17512/27256
+ 
+ tpr
+ tnr 
+ ppv
+ 
+fit3<-glm(cardio~cholesterol,data=disease,family="binomial") 
+disease$prob<-predict(fit3,type="response") #save predicted probabilities
+
+table(predict=as.numeric(disease$prob>.5),truth=disease$cardio)%>%addmargins
+
+logit<-function(p)log(odds(p))
+disease$logit<-predict(fit3) #get predicted log-odds (logits)
+
+
+disease %>% mutate(cardio_lev=factor(cardio,levels=c("malignant","benign"))) %>% 
+ggplot(aes(logit, fill = 'purple'))+geom_density(alpha=.3)+geom_vline(xintercept=0,lty=2)
+
+library(plotROC) #install.packages(plotROC)
+
+#geom_roc needs true outcome (d, should be 0/1) and predicted probability/logit (m, or just  predictor if just one):
+ROCplot<-ggplot(disease)+geom_roc(aes(d=cardio,m=prob), n.cuts=0) 
+
+ROCplot
+
+#auc is area under curve
+#as soon as you build your ROC curve, you can compute the AUC with
+calc_auc(ROCplot)
+
+```
+The intercept suggests that when both cholesterol is 0 and weight is 0, a person's likelihood for cardiovascular disease is -2.615. This number is not accurate since we know that weight can never be zero and neither can cholesterol. Cholesterol and weight both have significant effects on whether or not a person has cardiovascular disease as their p-values are well below 0.05. The true positive rate is 0.5006432, the true negative rate is 0.7217669 and the precision is 0.6425007. The area under the curve is 0.5943269 as seen in the ROC plot. 
+
+Part 6
+```{R}
+head(disease)
+fit2 <- glm(cardio ~ cholesterol+weight+age+gender+height+ap_hi+ap_lo+gluc+smoke+alco+active, data=disease, family = "binomial") #fit model
+prob <- predict(fit2,type="response")
+
+class_diag <- function(probs,truth){
+  #CONFUSION MATRIX: CALCULATE ACCURACY, TPR, TNR, PPV
+  tab<-table(factor(probs>.5,levels=c("FALSE","TRUE")),truth)
+  acc=sum(diag(tab))/sum(tab)
+  sens=tab[2,2]/colSums(tab)[2]
+  spec=tab[1,1]/colSums(tab)[1]
+  ppv=tab[2,2]/rowSums(tab)[2]
+  f1=2*(sens*ppv)/(sens+ppv)
+
+  if(is.numeric(truth)==FALSE & is.logical(truth)==FALSE) truth<-as.numeric(truth)-1
+  
+  #CALCULATE EXACT AUC
+  ord<-order(probs, decreasing=TRUE)
+  probs <- probs[ord]; truth <- truth[ord]
+  
+  TPR=cumsum(truth)/max(1,sum(truth)) 
+  FPR=cumsum(!truth)/max(1,sum(!truth))
+  
+  dup<-c(probs[-1]>=probs[-length(probs)], FALSE)
+  TPR<-c(0,TPR[!dup],1); FPR<-c(0,FPR[!dup],1)
+  n <- length(TPR)
+  auc<- sum( ((TPR[-1]+TPR[-n])/2) * (FPR[-1]-FPR[-n]) )
+
+  data.frame(acc,sens,spec,ppv,f1,auc)
+}
+
+class_diag(prob,disease$cardio)
+
+#install.packages('pROC')
+library(pROC) #Compare with this AUC calculator!
+auc(disease$cardio,prob) #Same
+
+set.seed(1234)
+k=10 #choose number of folds
+
+data<-disease[sample(nrow(disease)),] #randomly order rows
+folds<-cut(seq(1:nrow(disease)),breaks=k,labels=F) #create folds
+
+diags<-NULL
+for(i in 1:k){
+  ## Create training and test sets
+  train<-data[folds!=i,] 
+  test<-data[folds==i,]
+  
+  truth<-test$cardio ## Truth labels for fold i
+  
+  ## Train model on training set (all but fold i)
+  fit2 <- glm(cardio ~ cholesterol+weight+age+gender+height+ap_hi+ap_lo+gluc+smoke+alco+active, data=disease, family = "binomial")
+  
+  ## Test model on test set (fold i) 
+  probs<-predict(fit,newdata = test,type="response")
+  
+  ## Get diagnostics for fold i
+  diags<-rbind(diags,class_diag(probs,truth))
+}
+
+
+summarize_all(diags,mean) #average diagnostics across all k folds
+
+#Lasso on medical data
+library(glmnet)
+y<-as.matrix(disease$cardio) #grab response
+x<-model.matrix(cardio~.,data=disease)[,-1] #predictors (drop intercept)
+head(x)
+
+
+cv <- cv.glmnet(x,y, family="binomial") #picks an optimal value for lambda through 10-fold CV
+
+#make a plot of the coefficients for different values of lambda
+{plot(cv$glmnet.fit, "lambda", label=TRUE); abline(v = log(cv$lambda.1se)); abline(v = log(cv$lambda.min),lty=2)}
+
+cv<-cv.glmnet(x,y,family="binomial")
+lasso<-glmnet(x,y,family="binomial",lambda=cv$lambda.1se)
+coef(lasso)
+
+
+k=10 #choose number of folds
+
+data<-disease[sample(nrow(disease)),] #randomly order rows
+folds<-cut(seq(1:nrow(disease)),breaks=k,labels=F) #create folds
+
+diags<-NULL
+for(i in 1:k){
+  ## Create training and test sets
+  train<-data[folds!=i,] 
+  test<-data[folds==i,]
+  
+  truth<-test$cardio ## Truth labels for fold i
+  
+  ## Train model on training set (all but fold i)
+  fit2 <- glm(cardio ~ cardio_cat, data=disease, family = "binomial")
+  
+  ## Test model on test set (fold i) 
+  probs<-predict(fit,newdata = test,type="response")
+  
+  ## Get diagnostics for fold i
+  diags<-rbind(diags,class_diag(probs,truth))
+}
+
+
+summarize_all(diags,mean) #average diagnostics across all k folds
+
+```
+
+As indicated above, my glmnet plot was not meaningful. The only value that was lasso selected was cardio_catyes which is when the person had a cardiovascular disease. The area under the curve for the first plot was 0.7849059. When plotting the log Lambda against the coefficients, the area under the curve was 0.6079853. When comparing the model’s out-of-sample AUC to that of my logistic regressions above, the areas under the curve are very similar with values of 0.6080042 and 0.6079853. 
+
+

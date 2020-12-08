@@ -1,0 +1,178 @@
+---
+title: "Project 1 SDS 348"
+author: "Mallika Singh"
+date: "2020-10-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE) 
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+install.packages("tidyverse")
+install.packages("dplyr")
+install.packages("fivethirtyeight")
+
+```{r}
+
+library(tidyverse)
+library(dplyr)
+library("fivethirtyeight")
+raceByCity <- read.csv("ShareRaceByCity.csv")
+```
+The Tidying/Untidying Process
+
+In the section below, I first decided to untidy the police_killings dataset from the fivethirtyeight package. To do this, I used pivot_wider to create six new columns to show the race of the victim rather than having a "race" column that summarized them all. I then moved to untidy the raceByCity dataset in which I used pivot_longer to create a row for each different aspect for each victim. After I had untidied both datasets I reversed the process by using pivot_longer for the police_killings dataset to create a "race" column and using pivot_wider for the raceByCity dataset to make each obversation its own row. 
+
+```{r}
+head(police_killings)
+head(raceByCity)
+
+# Both datasets are tidy so I will be untidying them below. 
+
+# Untidy police_killings
+
+untidy_police <- pivot_wider(police_killings, names_from = raceethnicity, values_from = raceethnicity)
+head(untidy_police)
+
+# Untidy raceByCity
+
+untidy_raceByCity <- pivot_longer(raceByCity, cols = c('share_white':'share_hispanic'), names_to = 'share', values_to = 'values')
+head(untidy_raceByCity)
+
+# Tidying them back to normal
+
+tidy_police <- pivot_longer(untidy_police, cols = c('Black':'Native American'), names_to = 'Race') %>% drop_na()
+tidy_police = select(tidy_police, -c(35))
+head(tidy_police)
+
+tidy_raceByCity <- pivot_wider(untidy_raceByCity, names_from = share, values_from = values)
+head(tidy_raceByCity)
+
+```
+
+The Joining Process
+
+I joined the two datasets raceByCity and police_killings using a left_join. I joined them by state, city and share_black so that there wouldn't be multiple observations for the same city and state. 
+```{r}
+tidy_raceByCity$Geographic.area = as.character(tidy_raceByCity$Geographic.area)
+tidy_raceByCity$share_black = as.double(tidy_raceByCity$share_black)
+fulldata <- tidy_police %>% left_join(tidy_raceByCity, by=c('state' = 'Geographic.area', 'city' = 'City', 'share_black' = 'share_black')) 
+head(fulldata)
+```
+
+Summary Statistics
+
+```{r}
+fulldata <- fulldata %>% mutate(relative_black = case_when(share_black > 67 ~ "high",
+                                              share_black <= 66 & 33 <= share_black ~ "med",
+                                              share_black < 33 ~ "low"))
+head(fulldata)
+
+fulldata = select(fulldata, -c(35:38))
+head(fulldata)
+
+fulldata %>% filter(state == 'AL')
+
+# Summary statistics before grouping by state
+fulldata %>% summarize(mean(age, na.rm=T), sd(age, na.rm = T), var(age, na.rm = T), n(), n_distinct(age), min(age), max(age))
+fulldata %>% summarize(mean(share_black, na.rm=T), sd(share_black, na.rm = T), var(share_black, na.rm = T), n(), n_distinct(share_black), min(share_black), max(share_black))
+fulldata %>% summarize(mean(state_fp, na.rm=T), sd(state_fp, na.rm = T), var(state_fp, na.rm = T), n(), n_distinct(state_fp), min(state_fp), max(state_fp))
+
+# Summary statistics after grouping by state
+fulldata %>% group_by(state) %>% summarize(mean(age, na.rm=T), sd(age, na.rm = T), var(age, na.rm = T), n(), n_distinct(age), min(age), max(age))
+fulldata %>% group_by(state) %>% summarize(mean(share_black, na.rm=T), sd(share_black, na.rm = T), var(share_black, na.rm = T), n(), n_distinct(share_black), min(share_black), max(share_black))
+fulldata %>% group_by(state) %>% summarize(mean(state_fp, na.rm=T), sd(state_fp, na.rm = T), var(state_fp, na.rm = T), n(), n_distinct(state_fp), min(state_fp), max(state_fp))
+
+fulldata %>% arrange(gender)
+# Interesting how there are only 20 rows of females in a dataset of 410 rows. 
+```
+Summarizing the Data
+
+When wrangling the data, I first decided to mutate the dataset by creating a new column called relative_black. This column determined whether the percetage of blacks were in the high, medium or low range. I then used select to remove columns 35 to 38 because they had duplicated data. I then calculated all the summary statistics which are shown above for the state code (state_fp). Then I grouped by state for each of the three variables: age, share_black and state_fp and calculated the summary statistics based on these as well. Finally, I wanted to see how many female victims there were in comparison to male victims so I arranged the data by gender.
+
+
+Data Plots
+
+Plot 1: Heatmap
+```{r}
+cormat <- fulldata %>% select('state_fp', 'pop':'share_hispanic.x', 'county_income') %>% cor(use = 'pair')
+cormat %>% as.data.frame() %>% rownames_to_column('var1') %>% pivot_longer(-1, 'var2', values_to='Correlation') %>% ggplot(aes(var1, var2, fill=Correlation)) + geom_tile() + scale_fill_gradient2(low="green",mid="blue",high="orange")+ #makes colors!
+geom_text(aes(label=round(Correlation,2)),color = "white", size = 3)+ #overlays correlation values
+theme(axis.text.x = element_text(angle = 90, hjust = 1))+ #flips the x-axis labels
+coord_fixed()
+```
+This correlation heatmap examines the correlation between 6 variables. In addition to the percentage of various races in each state, it looks at the county income and the county population. The highest positive correlation is between the share_white.x and the state_fp, which corresponds to the state code. 
+
+
+Plot 2
+```{r}
+fulldata %>% group_by(state) %>% summarize(`Percent Black` = mean(share_black, na.rm=T)) %>% ggplot(aes(state, `Percent Black`, fill = state)) + geom_bar(stat='identity')
+
+```
+This plot shows the relationship between the percentage of African Americans in each state where there have been police shootings resulting in death. After expanding the graph, it can be seen that the state with the highest percentage of African Americans is Maryland. In the following plot I will be examining the relationship of the number of deaths per state to see if there is a correlation between the percentage of African Americans in each state and the number of shootings. 
+
+Plot 3
+```{r}
+fulldata %>% count(state)
+death_per_state <- fulldata %>% count(state) %>% as.data.frame()
+ggplot(death_per_state, aes(state, n)) + geom_point(stat= 'summary', color = 'orange')
+```
+This plot is relatively simple compared to the others. It takes a look at the number of shootings in each state and can be compared to the above plot which looks at the percentage of African Americans in each state. I expected there to be a higher number of shootings in one of the states which had the highest percentage of African Americans, however, based on this plot, the two states with the most shootings were California and Texas. Likely the correlation has more to do with population rather than percentage of African Americans. 
+
+
+
+Dimensionality Reduction: Clustering Plots
+
+Plot 1
+```{r}
+set.seed(348)
+clust_dat1<-fulldata%>%dplyr::select(share_black,state_fp) %>% as.data.frame()
+head(clust_dat1)
+kmeans1 <- clust_dat1%>%kmeans(3)
+head(kmeans1)
+
+kmeansclust <- clust_dat1 %>% mutate(cluster=as.factor(kmeans1$cluster)) 
+
+kmeansclust%>%ggplot(aes(state_fp, share_black,color=cluster))+geom_point() 
+```
+
+Plot 2
+```{r}
+clust_dat2<-fulldata%>%dplyr::select(age,state_fp) %>% as.data.frame()
+head(clust_dat2)
+kmeans2 <- clust_dat2%>%kmeans(3)
+head(kmeans2)
+
+kmeansclust2 <- clust_dat2 %>% mutate(cluster=as.factor(kmeans2$cluster)) #save the cluster solution in your dataset
+
+kmeansclust2 %>%ggplot(aes(state_fp, age,color=cluster))+geom_point() #vizualize it
+```
+
+
+Plot 3
+```{r}
+clust_dat3<-fulldata%>%dplyr::select(college,state_fp) %>% as.data.frame()
+head(clust_dat3)
+library(cluster)
+pam1<-clust_dat3%>%pam(k=3)
+head(pam1)
+
+pamclust<-clust_dat3%>%mutate(cluster=as.factor(pam1$clustering)) #save the cluster solution in your dataset
+pamclust%>%ggplot(aes(state_fp, college, color=cluster))+geom_point() #visualize it
+```
+
+Dimensionality Reduction Summary
+
+The first plot uses k-means clustering to form three clusters of the share_black values. The clusters are plotted against the state_fp variable which is the state code. Three clusters were chosen because it minimized the difference between the variance of the values. The second plot displays three clusters of the various ages of the gunshot victims. The ages ranged from 16 to 87 and are plotted against the state code once again. As one can tell, the mix of ages were relatively similar across all 50 states. The third plot maps the college attendance rates across each state. It contains three clusters which also indicate that college attendance rates were relatively similar across the 50 states with a few outliers in each cluster category. 
+
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

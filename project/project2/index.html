@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Mallika Singh" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
+    <title>SDS 348 Project 2</title>
+    <meta name="generator" content="Hugo 0.79.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="/post/">BLOG</a></li>
+        
+        <li><a href="/projects/">PROJECTS</a></li>
+        
+        <li><a href="/resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="/project/project2/">SDS 348 Project 2</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         November 22, 2020 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<div id="r-markdown" class="section level2">
+<h2>R Markdown</h2>
+<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
+<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
+<p>install.packages(“tidyverse”)
+install.packages(“dplyr”)</p>
+<p>Part 0
+My dataset is about cardiovascular disease and cardiovascular health of various people. In this project I am looking into what affects whether or not a person has cardiovascular disease or whether or not a person is at risk for cardiovascular disease. The data is measuring 12 different aspects of a person; they are listed below.</p>
+<p>Age | Objective Feature | age | int (days)
+Height | Objective Feature | height | int (cm) |
+Weight | Objective Feature | weight | float (kg) |
+Gender | Objective Feature | gender | categorical code |
+Systolic blood pressure | Examination Feature | ap_hi | int |
+Diastolic blood pressure | Examination Feature | ap_lo | int |
+Cholesterol | Examination Feature | cholesterol | 1: normal, 2: above normal, 3: well above normal |
+Glucose | Examination Feature | gluc | 1: normal, 2: above normal, 3: well above normal |
+Smoking | Subjective Feature | smoke | binary |
+Alcohol intake | Subjective Feature | alco | binary |
+Physical activity | Subjective Feature | active | binary |
+Presence or absence of cardiovascular disease | Target Variable | cardio | binary |</p>
+<p>Part 1</p>
+<p>Null Hypothesis: For each response variable, the means of all groups are equal.
+Alternative Hypothesis: For at least 1 response variable, at least 1 group mean differs.</p>
+<p>This dataset includes multiple people who have/do not have heart diseases and their bodily statistics shown above.</p>
+<p>Part 1: MANOVA TEST</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.4     ✓ dplyr   1.0.2
+## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
+## ✓ readr   1.4.0     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(dplyr)
+
+cardio_train &lt;- read.csv(&#39;cardio_train.csv&#39;)
+cardio_train &lt;- cardio_train %&gt;% as.data.frame()
+
+cardio_train &lt;- cardio_train %&gt;% separate(id.age.gender.height.weight.ap_hi.ap_lo.cholesterol.gluc.smoke.alco.active.cardio, c(&#39;id&#39;, &#39;age&#39;, &#39;gender&#39;, &#39;height&#39;, &#39;weight&#39;, &#39;x&#39;, &#39;ap_hi&#39;, &#39;ap_lo&#39;, &#39;cholesterol&#39;, &#39;gluc&#39;, &#39;smoke&#39;, &#39;alco&#39;, &#39;active&#39;, &#39;cardio&#39;))
+
+cardio_train &lt;- cardio_train %&gt;% select(-x)
+cardio_train &lt;- lapply(cardio_train, function(x) as.numeric(as.character(x))) %&gt;% as.data.frame()
+head(cardio_train)</code></pre>
+<pre><code>##   id   age gender height weight ap_hi ap_lo cholesterol gluc smoke alco active
+## 1  0 18393      2    168     62   110    80           1    1     0    0      1
+## 2  1 20228      1    156     85   140    90           3    1     0    0      1
+## 3  2 18857      1    165     64   130    70           3    1     0    0      0
+## 4  3 17623      2    169     82   150   100           1    1     0    0      1
+## 5  4 17474      1    156     56   100    60           1    1     0    0      0
+## 6  8 21914      1    151     67   120    80           2    2     0    0      0
+##   cardio
+## 1      0
+## 2      1
+## 3      1
+## 4      1
+## 5      0
+## 6      0</code></pre>
+<pre class="r"><code>disease &lt;- cardio_train %&gt;% mutate(age = age/365) %&gt;% round()
+disease&lt;-disease%&gt;%mutate(cardio_cat=ifelse(disease$cardio==1,&#39;yes&#39;,&#39;no&#39;))
+
+head(disease)</code></pre>
+<pre><code>##   id age gender height weight ap_hi ap_lo cholesterol gluc smoke alco active
+## 1  0  50      2    168     62   110    80           1    1     0    0      1
+## 2  1  55      1    156     85   140    90           3    1     0    0      1
+## 3  2  52      1    165     64   130    70           3    1     0    0      0
+## 4  3  48      2    169     82   150   100           1    1     0    0      1
+## 5  4  48      1    156     56   100    60           1    1     0    0      0
+## 6  8  60      1    151     67   120    80           2    2     0    0      0
+##   cardio cardio_cat
+## 1      0         no
+## 2      1        yes
+## 3      1        yes
+## 4      1        yes
+## 5      0         no
+## 6      0         no</code></pre>
+<pre class="r"><code>man1 &lt;- manova(cbind(cholesterol, weight) ~ cardio_cat, data = disease)
+summary(man1)</code></pre>
+<pre><code>##               Df   Pillai approx F num Df den Df    Pr(&gt;F)    
+## cardio_cat     1 0.071962   2713.9      2  69997 &lt; 2.2e-16 ***
+## Residuals  69998                                              
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary.aov(man1)</code></pre>
+<pre><code>##  Response cholesterol :
+##                Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## cardio_cat      1  1584.1 1584.14  3599.4 &lt; 2.2e-16 ***
+## Residuals   69998 30807.2    0.44                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+##  Response weight :
+##                Df   Sum Sq Mean Sq F value    Pr(&gt;F)    
+## cardio_cat      1   478716  478716  2388.7 &lt; 2.2e-16 ***
+## Residuals   69998 14028119     200                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>pairwise.t.test(disease$cholesterol,disease$cardio_cat, p.adj=&quot;none&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  disease$cholesterol and disease$cardio_cat 
+## 
+##     no    
+## yes &lt;2e-16
+## 
+## P value adjustment method: none</code></pre>
+<pre class="r"><code>pairwise.t.test(disease$weight,disease$cardio_cat, p.adj=&quot;none&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  disease$weight and disease$cardio_cat 
+## 
+##     no    
+## yes &lt;2e-16
+## 
+## P value adjustment method: none</code></pre>
+<p>The low p-value suggests that at least one person with cardiovascular disease differs from at least one response variable. When getting the univariate ANOVA results, it is seen that both response variables are significant. The assumptions of MANOVA are hefty as they include random samples, multivariate normality of dependent variables, homogeneity of within-group co-variance matrices, linear relationships among dependent variables, no extreme univariate or multivariate outliers and no multicollinearity. Based purely on the data I am using, I would think that not every assumption has been met. I felt that there were likely no outliers and that this is a random sample. I performed five total tests: the MANOVA, and the two ANOVAS and the two pairwise tests, in which both p-values were significant. Using the Bonferroni test, the new p-value would be 0.05/5 = 0.01. Even then, all the values are significant.</p>
+<p>Null Hypothesis: Cholesterol level for females is the same as for males
+Alternative Hypothesis: Cholesterol level for females is different than for males.</p>
+<p>Part 2: Randomization Test</p>
+<pre class="r"><code>head(disease) </code></pre>
+<pre><code>##   id age gender height weight ap_hi ap_lo cholesterol gluc smoke alco active
+## 1  0  50      2    168     62   110    80           1    1     0    0      1
+## 2  1  55      1    156     85   140    90           3    1     0    0      1
+## 3  2  52      1    165     64   130    70           3    1     0    0      0
+## 4  3  48      2    169     82   150   100           1    1     0    0      1
+## 5  4  48      1    156     56   100    60           1    1     0    0      0
+## 6  8  60      1    151     67   120    80           2    2     0    0      0
+##   cardio cardio_cat
+## 1      0         no
+## 2      1        yes
+## 3      1        yes
+## 4      1        yes
+## 5      0         no
+## 6      0         no</code></pre>
+<pre class="r"><code>disease%&gt;%group_by(gender)%&gt;%summarize(means=mean(cholesterol))%&gt;%summarize(`mean_diff`=diff(means))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   mean_diff
+##       &lt;dbl&gt;
+## 1   -0.0511</code></pre>
+<pre class="r"><code>rand_dist&lt;-vector() #create vector to hold diffs under null hypothesis
+
+for(i in 1:500){
+  new&lt;-data.frame(cholest=sample(disease$cholesterol),gend=disease$gender) #scramble columns
+  rand_dist[i]&lt;-mean(new[new$gend==1,]$cholest)-mean(new[new$gend==2,]$cholest)}
+
+{hist(rand_dist,main=&quot;&quot;,ylab=&quot;&quot;); abline(v = c(-0.05110232, 0.05110232),col=&quot;red&quot;)}</code></pre>
+<p><img src="/project/project2_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>mean(rand_dist&gt;0.05110232   | rand_dist&lt; -0.05110232)</code></pre>
+<pre><code>## [1] 0</code></pre>
+<p>For this randomization test, the null hypothesis was that cholesterol levels for females are the same as men. The alternative hypothesis was that cholesterol levels for females are different than for men. The mean difference between the two was -0.05110232. Based on the histogram, the randomization test shows that the data looks relatively normal.</p>
+<p>Part 3</p>
+<pre class="r"><code>library(sandwich)
+library(lmtest)</code></pre>
+<pre><code>## Loading required package: zoo</code></pre>
+<pre><code>## 
+## Attaching package: &#39;zoo&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     as.Date, as.Date.numeric</code></pre>
+<pre class="r"><code># Mean centering the numeric variable: cholesterol
+
+disease&lt;-disease%&gt;%mutate(gluc_c=disease$gluc-mean(disease$gluc))
+
+head(disease)</code></pre>
+<pre><code>##   id age gender height weight ap_hi ap_lo cholesterol gluc smoke alco active
+## 1  0  50      2    168     62   110    80           1    1     0    0      1
+## 2  1  55      1    156     85   140    90           3    1     0    0      1
+## 3  2  52      1    165     64   130    70           3    1     0    0      0
+## 4  3  48      2    169     82   150   100           1    1     0    0      1
+## 5  4  48      1    156     56   100    60           1    1     0    0      0
+## 6  8  60      1    151     67   120    80           2    2     0    0      0
+##   cardio cardio_cat     gluc_c
+## 1      0         no -0.2264571
+## 2      1        yes -0.2264571
+## 3      1        yes -0.2264571
+## 4      1        yes -0.2264571
+## 5      0         no -0.2264571
+## 6      0         no  0.7735429</code></pre>
+<pre class="r"><code># Linear regression: predicted value of cholesterol from glucose and weight
+fit &lt;- lm(cholesterol ~ gluc_c * weight, data = disease)
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = cholesterol ~ gluc_c * weight, data = disease)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.4060 -0.2725 -0.2124 -0.1021  1.9230 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    1.0288112  0.0120707  85.232  &lt; 2e-16 ***
+## gluc_c         0.6723539  0.0201274  33.405  &lt; 2e-16 ***
+## weight         0.0045785  0.0001600  28.618  &lt; 2e-16 ***
+## gluc_c:weight -0.0019138  0.0002558  -7.482 7.39e-14 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.6033 on 69996 degrees of freedom
+## Multiple R-squared:  0.2134, Adjusted R-squared:  0.2134 
+## F-statistic:  6330 on 3 and 69996 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>disease %&gt;% mutate(fits=predict(fit))%&gt;% #get predicted values
+  ggplot(aes(cholesterol,weight,color=gluc_c))+geom_point()+geom_line(aes(y=fits))</code></pre>
+<p><img src="/project/project2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>coeftest(fit, vcov = vcovHC(fit))</code></pre>
+<pre><code>## 
+## t test of coefficients:
+## 
+##                  Estimate  Std. Error t value  Pr(&gt;|t|)    
+## (Intercept)    1.02881125  0.01263112 81.4505 &lt; 2.2e-16 ***
+## gluc_c         0.67235386  0.02684045 25.0500 &lt; 2.2e-16 ***
+## weight         0.00457851  0.00017286 26.4866 &lt; 2.2e-16 ***
+## gluc_c:weight -0.00191381  0.00033864 -5.6515 1.597e-08 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code># Checking Assumptions
+
+# Linearity
+resids&lt;-fit$residuals; fitvals&lt;-fit$fitted.values
+ggplot()+geom_point(aes(fitvals,resids))+geom_hline(yintercept=0, col=&quot;red&quot;)</code></pre>
+<p><img src="/project/project2_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<pre class="r"><code># Homoskedascity
+bptest(fit)</code></pre>
+<pre><code>## 
+##  studentized Breusch-Pagan test
+## 
+## data:  fit
+## BP = 2823.1, df = 3, p-value &lt; 2.2e-16</code></pre>
+<p>In Part 3, I run a linear regression to predict the cholesterol level based on a person’s weight and gender. The intercept is the predicted value of cholesterol when a person’s weight is zero and glucose level is 1. The estimate for ‘gluc’ is the slope for glucose on cholesterol while controlling for weight. The estimate for weight is the slope for weight on cholesterol while controlling for glucose. The estimate for ‘gluc_c:weight’ is also significant as it is the interaction between glucose and weight and its effect on cholesterol. It seems as though assumptions for homoskedascity and linearity have not been met with this data. After using robust standard errors, the results look relatively similar as everything is still significant.</p>
+<p>Part 4</p>
+<pre class="r"><code>fit2 &lt;- lm(cholesterol ~ gluc_c * weight, data = disease)
+summary(fit2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = cholesterol ~ gluc_c * weight, data = disease)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.4060 -0.2725 -0.2124 -0.1021  1.9230 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    1.0288112  0.0120707  85.232  &lt; 2e-16 ***
+## gluc_c         0.6723539  0.0201274  33.405  &lt; 2e-16 ***
+## weight         0.0045785  0.0001600  28.618  &lt; 2e-16 ***
+## gluc_c:weight -0.0019138  0.0002558  -7.482 7.39e-14 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.6033 on 69996 degrees of freedom
+## Multiple R-squared:  0.2134, Adjusted R-squared:  0.2134 
+## F-statistic:  6330 on 3 and 69996 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>disease %&gt;% summarize_all(sd)</code></pre>
+<pre><code>## Warning in var(if (is.vector(x) || is.factor(x)) x else as.double(x), na.rm =
+## na.rm): NAs introduced by coercion</code></pre>
+<pre><code>##        id      age   gender   height   weight    ap_hi    ap_lo cholesterol
+## 1 28851.3 6.765294 0.476838 8.210126 14.39595 153.9912 188.4715   0.6802503
+##        gluc     smoke      alco    active    cardio cardio_cat    gluc_c
+## 1 0.5722703 0.2834838 0.2255677 0.3971791 0.5000035         NA 0.5722703</code></pre>
+<pre class="r"><code>boot_dat&lt;-disease[sample(nrow(disease),replace=TRUE),]
+
+
+samp_distn&lt;-replicate(100, {
+  boot_dat&lt;-boot_dat&lt;-disease[sample(nrow(disease),replace=TRUE),]
+  fit&lt;-lm(cholesterol ~ gluc_c * weight, data=boot_dat)
+  coef(fit)
+})
+
+## Estimated SEs
+samp_distn%&gt;%t%&gt;%as.data.frame%&gt;%summarize_all(sd)</code></pre>
+<pre><code>##   (Intercept)     gluc_c       weight gluc_c:weight
+## 1  0.01182772 0.02386209 0.0001596462  0.0002862749</code></pre>
+<p>After resampling the rows, the standard errors decreased by quite lot.</p>
+<p>Part 5</p>
+<pre class="r"><code># Logistic regression model predicting a binary variable (cardio) from two explanatory variables (cholesterol and weight)
+fit2 &lt;- glm(cardio ~ cholesterol+weight, data=disease, family = &quot;binomial&quot;)
+coeftest(fit2)</code></pre>
+<pre><code>## 
+## z test of coefficients:
+## 
+##                Estimate  Std. Error z value  Pr(&gt;|z|)    
+## (Intercept) -2.61461767  0.04548196 -57.487 &lt; 2.2e-16 ***
+## cholesterol  0.64615261  0.01253888  51.532 &lt; 2.2e-16 ***
+## weight       0.02354033  0.00058015  40.577 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>coef(fit2)%&gt;%exp%&gt;%round(5)%&gt;%data.frame</code></pre>
+<pre><code>##                   .
+## (Intercept) 0.07320
+## cholesterol 1.90819
+## weight      1.02382</code></pre>
+<pre class="r"><code>probs&lt;-predict(fit2,type=&quot;response&quot;) #get predicted probs from the model
+
+#let&#39;s use .5 as our threshold for predicting malignant
+table(predict=as.numeric(probs&gt;0.5),truth=disease$cardio)%&gt;%addmargins</code></pre>
+<pre><code>##        truth
+## predict     0     1   Sum
+##     0   25278 17468 42746
+##     1    9743 17511 27254
+##     Sum 35021 34979 70000</code></pre>
+<pre class="r"><code># Sensitivity (TPR)
+tpr &lt;- 17512/34979
+
+# Specificity (TNR)
+tnr &lt;- 25277/35021
+
+# Precision (PPV)
+ ppv &lt;- 17512/27256
+ 
+ tpr</code></pre>
+<pre><code>## [1] 0.5006432</code></pre>
+<pre class="r"><code> tnr </code></pre>
+<pre><code>## [1] 0.7217669</code></pre>
+<pre class="r"><code> ppv</code></pre>
+<pre><code>## [1] 0.6425007</code></pre>
+<pre class="r"><code>fit3&lt;-glm(cardio~cholesterol,data=disease,family=&quot;binomial&quot;) 
+disease$prob&lt;-predict(fit3,type=&quot;response&quot;) #save predicted probabilities
+
+table(predict=as.numeric(disease$prob&gt;.5),truth=disease$cardio)%&gt;%addmargins</code></pre>
+<pre><code>##        truth
+## predict     0     1   Sum
+##     0   29330 23055 52385
+##     1    5691 11924 17615
+##     Sum 35021 34979 70000</code></pre>
+<pre class="r"><code>logit&lt;-function(p)log(odds(p))
+disease$logit&lt;-predict(fit3) #get predicted log-odds (logits)
+
+
+disease %&gt;% mutate(cardio_lev=factor(cardio,levels=c(&quot;malignant&quot;,&quot;benign&quot;))) %&gt;% 
+ggplot(aes(logit, fill = &#39;purple&#39;))+geom_density(alpha=.3)+geom_vline(xintercept=0,lty=2)</code></pre>
+<p><img src="/project/project2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>library(plotROC) #install.packages(plotROC)
+
+#geom_roc needs true outcome (d, should be 0/1) and predicted probability/logit (m, or just  predictor if just one):
+ROCplot&lt;-ggplot(disease)+geom_roc(aes(d=cardio,m=prob), n.cuts=0) 
+
+ROCplot</code></pre>
+<p><img src="/project/project2_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
+<pre class="r"><code>#auc is area under curve
+#as soon as you build your ROC curve, you can compute the AUC with
+calc_auc(ROCplot)</code></pre>
+<pre><code>##   PANEL group       AUC
+## 1     1    -1 0.5943269</code></pre>
+<p>The intercept suggests that when both cholesterol is 0 and weight is 0, a person’s likelihood for cardiovascular disease is -2.615. This number is not accurate since we know that weight can never be zero and neither can cholesterol. Cholesterol and weight both have significant effects on whether or not a person has cardiovascular disease as their p-values are well below 0.05. The true positive rate is 0.5006432, the true negative rate is 0.7217669 and the precision is 0.6425007. The area under the curve is 0.5943269 as seen in the ROC plot.</p>
+<p>Part 6</p>
+<pre class="r"><code>head(disease)</code></pre>
+<pre><code>##   id age gender height weight ap_hi ap_lo cholesterol gluc smoke alco active
+## 1  0  50      2    168     62   110    80           1    1     0    0      1
+## 2  1  55      1    156     85   140    90           3    1     0    0      1
+## 3  2  52      1    165     64   130    70           3    1     0    0      0
+## 4  3  48      2    169     82   150   100           1    1     0    0      1
+## 5  4  48      1    156     56   100    60           1    1     0    0      0
+## 6  8  60      1    151     67   120    80           2    2     0    0      0
+##   cardio cardio_cat     gluc_c      prob      logit
+## 1      0         no -0.2264571 0.4392499 -0.2442070
+## 2      1        yes -0.2264571 0.7598690  1.1519615
+## 3      1        yes -0.2264571 0.7598690  1.1519615
+## 4      1        yes -0.2264571 0.4392499 -0.2442070
+## 5      0         no -0.2264571 0.4392499 -0.2442070
+## 6      0         no  0.7735429 0.6115607  0.4538772</code></pre>
+<pre class="r"><code>fit2 &lt;- glm(cardio ~ cholesterol+weight+age+gender+height+ap_hi+ap_lo+gluc+smoke+alco+active, data=disease, family = &quot;binomial&quot;) #fit model</code></pre>
+<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<pre class="r"><code>prob &lt;- predict(fit2,type=&quot;response&quot;)
+
+class_diag &lt;- function(probs,truth){
+  #CONFUSION MATRIX: CALCULATE ACCURACY, TPR, TNR, PPV
+  tab&lt;-table(factor(probs&gt;.5,levels=c(&quot;FALSE&quot;,&quot;TRUE&quot;)),truth)
+  acc=sum(diag(tab))/sum(tab)
+  sens=tab[2,2]/colSums(tab)[2]
+  spec=tab[1,1]/colSums(tab)[1]
+  ppv=tab[2,2]/rowSums(tab)[2]
+  f1=2*(sens*ppv)/(sens+ppv)
+
+  if(is.numeric(truth)==FALSE &amp; is.logical(truth)==FALSE) truth&lt;-as.numeric(truth)-1
+  
+  #CALCULATE EXACT AUC
+  ord&lt;-order(probs, decreasing=TRUE)
+  probs &lt;- probs[ord]; truth &lt;- truth[ord]
+  
+  TPR=cumsum(truth)/max(1,sum(truth)) 
+  FPR=cumsum(!truth)/max(1,sum(!truth))
+  
+  dup&lt;-c(probs[-1]&gt;=probs[-length(probs)], FALSE)
+  TPR&lt;-c(0,TPR[!dup],1); FPR&lt;-c(0,FPR[!dup],1)
+  n &lt;- length(TPR)
+  auc&lt;- sum( ((TPR[-1]+TPR[-n])/2) * (FPR[-1]-FPR[-n]) )
+
+  data.frame(acc,sens,spec,ppv,f1,auc)
+}
+
+class_diag(prob,disease$cardio)</code></pre>
+<pre><code>##         acc     sens      spec       ppv       f1       auc
+## 1 0.7216714 0.678064 0.7652266 0.7425798 0.708857 0.7849059</code></pre>
+<pre class="r"><code>#install.packages(&#39;pROC&#39;)
+library(pROC) #Compare with this AUC calculator!</code></pre>
+<pre><code>## Type &#39;citation(&quot;pROC&quot;)&#39; for a citation.</code></pre>
+<pre><code>## 
+## Attaching package: &#39;pROC&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:plotROC&#39;:
+## 
+##     ggroc</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     cov, smooth, var</code></pre>
+<pre class="r"><code>auc(disease$cardio,prob) #Same</code></pre>
+<pre><code>## Setting levels: control = 0, case = 1</code></pre>
+<pre><code>## Setting direction: controls &lt; cases</code></pre>
+<pre><code>## Area under the curve: 0.7849</code></pre>
+<pre class="r"><code>set.seed(1234)
+k=10 #choose number of folds
+
+data&lt;-disease[sample(nrow(disease)),] #randomly order rows
+folds&lt;-cut(seq(1:nrow(disease)),breaks=k,labels=F) #create folds
+
+diags&lt;-NULL
+for(i in 1:k){
+  ## Create training and test sets
+  train&lt;-data[folds!=i,] 
+  test&lt;-data[folds==i,]
+  
+  truth&lt;-test$cardio ## Truth labels for fold i
+  
+  ## Train model on training set (all but fold i)
+  fit2 &lt;- glm(cardio ~ cholesterol+weight+age+gender+height+ap_hi+ap_lo+gluc+smoke+alco+active, data=disease, family = &quot;binomial&quot;)
+  
+  ## Test model on test set (fold i) 
+  probs&lt;-predict(fit,newdata = test,type=&quot;response&quot;)
+  
+  ## Get diagnostics for fold i
+  diags&lt;-rbind(diags,class_diag(probs,truth))
+}</code></pre>
+<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<pre class="r"><code>summarize_all(diags,mean) #average diagnostics across all k folds</code></pre>
+<pre><code>##      acc sens spec    ppv        f1       auc
+## 1 0.4997    1    0 0.4997 0.6663947 0.6080042</code></pre>
+<pre class="r"><code>#Lasso on medical data
+library(glmnet)</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## 
+## Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:tidyr&#39;:
+## 
+##     expand, pack, unpack</code></pre>
+<pre><code>## Loaded glmnet 4.0-2</code></pre>
+<pre class="r"><code>y&lt;-as.matrix(disease$cardio) #grab response
+x&lt;-model.matrix(cardio~.,data=disease)[,-1] #predictors (drop intercept)
+head(x)</code></pre>
+<pre><code>##   id age gender height weight ap_hi ap_lo cholesterol gluc smoke alco active
+## 1  0  50      2    168     62   110    80           1    1     0    0      1
+## 2  1  55      1    156     85   140    90           3    1     0    0      1
+## 3  2  52      1    165     64   130    70           3    1     0    0      0
+## 4  3  48      2    169     82   150   100           1    1     0    0      1
+## 5  4  48      1    156     56   100    60           1    1     0    0      0
+## 6  8  60      1    151     67   120    80           2    2     0    0      0
+##   cardio_catyes     gluc_c      prob      logit
+## 1             0 -0.2264571 0.4392499 -0.2442070
+## 2             1 -0.2264571 0.7598690  1.1519615
+## 3             1 -0.2264571 0.7598690  1.1519615
+## 4             1 -0.2264571 0.4392499 -0.2442070
+## 5             0 -0.2264571 0.4392499 -0.2442070
+## 6             0  0.7735429 0.6115607  0.4538772</code></pre>
+<pre class="r"><code>cv &lt;- cv.glmnet(x,y, family=&quot;binomial&quot;) #picks an optimal value for lambda through 10-fold CV
+
+#make a plot of the coefficients for different values of lambda
+{plot(cv$glmnet.fit, &quot;lambda&quot;, label=TRUE); abline(v = log(cv$lambda.1se)); abline(v = log(cv$lambda.min),lty=2)}</code></pre>
+<pre><code>## Warning in plotCoef(x$beta, lambda = x$lambda, df = x$df, dev = x$dev.ratio, : 1
+## or less nonzero coefficients; glmnet plot is not meaningful</code></pre>
+<p><img src="/project/project2_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>cv&lt;-cv.glmnet(x,y,family=&quot;binomial&quot;)
+lasso&lt;-glmnet(x,y,family=&quot;binomial&quot;,lambda=cv$lambda.1se)
+coef(lasso)</code></pre>
+<pre><code>## 17 x 1 sparse Matrix of class &quot;dgCMatrix&quot;
+##                      s0
+## (Intercept)   -7.298434
+## id             .       
+## age            .       
+## gender         .       
+## height         .       
+## weight         .       
+## ap_hi          .       
+## ap_lo          .       
+## cholesterol    .       
+## gluc           .       
+## smoke          .       
+## alco           .       
+## active         .       
+## cardio_catyes 14.595667
+## gluc_c         .       
+## prob           .       
+## logit          .</code></pre>
+<pre class="r"><code>k=10 #choose number of folds
+
+data&lt;-disease[sample(nrow(disease)),] #randomly order rows
+folds&lt;-cut(seq(1:nrow(disease)),breaks=k,labels=F) #create folds
+
+diags&lt;-NULL
+for(i in 1:k){
+  ## Create training and test sets
+  train&lt;-data[folds!=i,] 
+  test&lt;-data[folds==i,]
+  
+  truth&lt;-test$cardio ## Truth labels for fold i
+  
+  ## Train model on training set (all but fold i)
+  fit2 &lt;- glm(cardio ~ cardio_cat, data=disease, family = &quot;binomial&quot;)
+  
+  ## Test model on test set (fold i) 
+  probs&lt;-predict(fit,newdata = test,type=&quot;response&quot;)
+  
+  ## Get diagnostics for fold i
+  diags&lt;-rbind(diags,class_diag(probs,truth))
+}</code></pre>
+<pre><code>## Warning: glm.fit: algorithm did not converge</code></pre>
+<pre><code>## Warning: glm.fit: algorithm did not converge
+
+## Warning: glm.fit: algorithm did not converge
+
+## Warning: glm.fit: algorithm did not converge
+
+## Warning: glm.fit: algorithm did not converge
+
+## Warning: glm.fit: algorithm did not converge
+
+## Warning: glm.fit: algorithm did not converge
+
+## Warning: glm.fit: algorithm did not converge
+
+## Warning: glm.fit: algorithm did not converge
+
+## Warning: glm.fit: algorithm did not converge</code></pre>
+<pre class="r"><code>summarize_all(diags,mean) #average diagnostics across all k folds</code></pre>
+<pre><code>##      acc sens spec    ppv        f1       auc
+## 1 0.4997    1    0 0.4997 0.6663813 0.6079853</code></pre>
+<p>As indicated above, my glmnet plot was not meaningful. The only value that was lasso selected was cardio_catyes which is when the person had a cardiovascular disease. The area under the curve for the first plot was 0.7849059. When plotting the log Lambda against the coefficients, the area under the curve was 0.6079853. When comparing the model’s out-of-sample AUC to that of my logistic regressions above, the areas under the curve are very similar with values of 0.6080042 and 0.6079853.</p>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="/js/docs.min.js"></script>
+<script src="/js/main.js"></script>
+
+<script src="/js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

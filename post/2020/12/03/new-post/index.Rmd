@@ -1,0 +1,14 @@
+---
+title: New post
+author: ''
+date: '2020-12-03'
+slug: new-post
+categories: []
+tags: []
+description: ''
+---
+
+Hello this is my first blog post on this site. xoxo  gossip girl. 
+[Link to project 1](/projects/project1/)
+
+[Link to google](https://www.google.com)

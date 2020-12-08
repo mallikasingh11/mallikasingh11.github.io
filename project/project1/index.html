@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Mallika Singh" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
+    <title>Project 1 SDS 348</title>
+    <meta name="generator" content="Hugo 0.79.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="/post/">BLOG</a></li>
+        
+        <li><a href="/projects/">PROJECTS</a></li>
+        
+        <li><a href="/resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="/project/project1/">Project 1 SDS 348</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         October 22, 2020 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<div id="r-markdown" class="section level2">
+<h2>R Markdown</h2>
+<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
+<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
+<p>install.packages(“tidyverse”)
+install.packages(“dplyr”)
+install.packages(“fivethirtyeight”)</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.4     ✓ dplyr   1.0.2
+## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
+## ✓ readr   1.4.0     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(dplyr)
+library(&quot;fivethirtyeight&quot;)</code></pre>
+<pre><code>## Some larger datasets need to be installed separately, like senators and
+## house_district_forecast. To install these, we recommend you install the
+## fivethirtyeightdata package by running:
+## install.packages(&#39;fivethirtyeightdata&#39;, repos =
+## &#39;https://fivethirtyeightdata.github.io/drat/&#39;, type = &#39;source&#39;)</code></pre>
+<pre class="r"><code>raceByCity &lt;- read.csv(&quot;ShareRaceByCity.csv&quot;)</code></pre>
+<p>The Tidying/Untidying Process</p>
+<p>In the section below, I first decided to untidy the police_killings dataset from the fivethirtyeight package. To do this, I used pivot_wider to create six new columns to show the race of the victim rather than having a “race” column that summarized them all. I then moved to untidy the raceByCity dataset in which I used pivot_longer to create a row for each different aspect for each victim. After I had untidied both datasets I reversed the process by using pivot_longer for the police_killings dataset to create a “race” column and using pivot_wider for the raceByCity dataset to make each obversation its own row.</p>
+<pre class="r"><code>head(police_killings)</code></pre>
+<pre><code>## # A tibble: 6 x 34
+##   name    age gender raceethnicity month   day  year streetaddress city  state
+##   &lt;chr&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;
+## 1 A&#39;do…    16 Male   Black         Febr…    23  2015 Clearview Ln  Mill… AL   
+## 2 Aaro…    27 Male   White         April     2  2015 300 block Ir… Pine… LA   
+## 3 Aaro…    26 Male   White         March    14  2015 22nd Ave and… Keno… WI   
+## 4 Aaro…    25 Male   Hispanic/Lat… March    11  2015 3000 Seminol… Sout… CA   
+## 5 Adam…    29 Male   White         March    19  2015 364 Hiwood A… Munr… OH   
+## 6 Adam…    29 Male   White         March     7  2015 18th St and … Phoe… AZ   
+## # … with 24 more variables: latitude &lt;dbl&gt;, longitude &lt;dbl&gt;, state_fp &lt;int&gt;,
+## #   county_fp &lt;int&gt;, tract_ce &lt;int&gt;, geo_id &lt;dbl&gt;, county_id &lt;int&gt;,
+## #   namelsad &lt;chr&gt;, lawenforcementagency &lt;chr&gt;, cause &lt;chr&gt;, armed &lt;chr&gt;,
+## #   pop &lt;int&gt;, share_white &lt;dbl&gt;, share_black &lt;dbl&gt;, share_hispanic &lt;dbl&gt;,
+## #   p_income &lt;int&gt;, h_income &lt;int&gt;, county_income &lt;int&gt;, comp_income &lt;dbl&gt;,
+## #   county_bucket &lt;int&gt;, nat_bucket &lt;int&gt;, pov &lt;dbl&gt;, urate &lt;dbl&gt;,
+## #   college &lt;dbl&gt;</code></pre>
+<pre class="r"><code>head(raceByCity)</code></pre>
+<pre><code>##   Geographic.area            City share_white share_black share_native_american
+## 1              AL      Abanda CDP        67.2        30.2                     0
+## 2              AL  Abbeville city        54.4        41.4                   0.1
+## 3              AL Adamsville city        52.3        44.9                   0.5
+## 4              AL    Addison town        99.1         0.1                     0
+## 5              AL      Akron town        13.2        86.5                     0
+## 6              AL  Alabaster city        79.4        13.5                   0.4
+##   share_asian share_hispanic
+## 1           0            1.6
+## 2           1            3.1
+## 3         0.3            2.3
+## 4         0.1            0.4
+## 5           0            0.3
+## 6         0.9              9</code></pre>
+<pre class="r"><code># Both datasets are tidy so I will be untidying them below. 
+
+# Untidy police_killings
+
+untidy_police &lt;- pivot_wider(police_killings, names_from = raceethnicity, values_from = raceethnicity)
+head(untidy_police)</code></pre>
+<pre><code>## # A tibble: 6 x 39
+##   name    age gender month   day  year streetaddress city  state latitude
+##   &lt;chr&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;
+## 1 A&#39;do…    16 Male   Febr…    23  2015 Clearview Ln  Mill… AL        32.5
+## 2 Aaro…    27 Male   April     2  2015 300 block Ir… Pine… LA        31.3
+## 3 Aaro…    26 Male   March    14  2015 22nd Ave and… Keno… WI        42.6
+## 4 Aaro…    25 Male   March    11  2015 3000 Seminol… Sout… CA        33.9
+## 5 Adam…    29 Male   March    19  2015 364 Hiwood A… Munr… OH        41.1
+## 6 Adam…    29 Male   March     7  2015 18th St and … Phoe… AZ        33.5
+## # … with 29 more variables: longitude &lt;dbl&gt;, state_fp &lt;int&gt;, county_fp &lt;int&gt;,
+## #   tract_ce &lt;int&gt;, geo_id &lt;dbl&gt;, county_id &lt;int&gt;, namelsad &lt;chr&gt;,
+## #   lawenforcementagency &lt;chr&gt;, cause &lt;chr&gt;, armed &lt;chr&gt;, pop &lt;int&gt;,
+## #   share_white &lt;dbl&gt;, share_black &lt;dbl&gt;, share_hispanic &lt;dbl&gt;, p_income &lt;int&gt;,
+## #   h_income &lt;int&gt;, county_income &lt;int&gt;, comp_income &lt;dbl&gt;,
+## #   county_bucket &lt;int&gt;, nat_bucket &lt;int&gt;, pov &lt;dbl&gt;, urate &lt;dbl&gt;,
+## #   college &lt;dbl&gt;, Black &lt;chr&gt;, White &lt;chr&gt;, `Hispanic/Latino` &lt;chr&gt;,
+## #   `NA` &lt;chr&gt;, `Asian/Pacific Islander` &lt;chr&gt;, `Native American` &lt;chr&gt;</code></pre>
+<pre class="r"><code># Untidy raceByCity
+
+untidy_raceByCity &lt;- pivot_longer(raceByCity, cols = c(&#39;share_white&#39;:&#39;share_hispanic&#39;), names_to = &#39;share&#39;, values_to = &#39;values&#39;)
+head(untidy_raceByCity)</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##   Geographic.area City           share                 values
+##   &lt;chr&gt;           &lt;chr&gt;          &lt;chr&gt;                 &lt;chr&gt; 
+## 1 AL              Abanda CDP     share_white           67.2  
+## 2 AL              Abanda CDP     share_black           30.2  
+## 3 AL              Abanda CDP     share_native_american 0     
+## 4 AL              Abanda CDP     share_asian           0     
+## 5 AL              Abanda CDP     share_hispanic        1.6   
+## 6 AL              Abbeville city share_white           54.4</code></pre>
+<pre class="r"><code># Tidying them back to normal
+
+tidy_police &lt;- pivot_longer(untidy_police, cols = c(&#39;Black&#39;:&#39;Native American&#39;), names_to = &#39;Race&#39;) %&gt;% drop_na()
+tidy_police = select(tidy_police, -c(35))
+head(tidy_police)</code></pre>
+<pre><code>## # A tibble: 6 x 34
+##   name    age gender month   day  year streetaddress city  state latitude
+##   &lt;chr&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;
+## 1 A&#39;do…    16 Male   Febr…    23  2015 Clearview Ln  Mill… AL        32.5
+## 2 Aaro…    27 Male   April     2  2015 300 block Ir… Pine… LA        31.3
+## 3 Aaro…    26 Male   March    14  2015 22nd Ave and… Keno… WI        42.6
+## 4 Aaro…    25 Male   March    11  2015 3000 Seminol… Sout… CA        33.9
+## 5 Adam…    29 Male   March    19  2015 364 Hiwood A… Munr… OH        41.1
+## 6 Adam…    29 Male   March     7  2015 18th St and … Phoe… AZ        33.5
+## # … with 24 more variables: longitude &lt;dbl&gt;, state_fp &lt;int&gt;, county_fp &lt;int&gt;,
+## #   tract_ce &lt;int&gt;, geo_id &lt;dbl&gt;, county_id &lt;int&gt;, namelsad &lt;chr&gt;,
+## #   lawenforcementagency &lt;chr&gt;, cause &lt;chr&gt;, armed &lt;chr&gt;, pop &lt;int&gt;,
+## #   share_white &lt;dbl&gt;, share_black &lt;dbl&gt;, share_hispanic &lt;dbl&gt;, p_income &lt;int&gt;,
+## #   h_income &lt;int&gt;, county_income &lt;int&gt;, comp_income &lt;dbl&gt;,
+## #   county_bucket &lt;int&gt;, nat_bucket &lt;int&gt;, pov &lt;dbl&gt;, urate &lt;dbl&gt;,
+## #   college &lt;dbl&gt;, Race &lt;chr&gt;</code></pre>
+<pre class="r"><code>tidy_raceByCity &lt;- pivot_wider(untidy_raceByCity, names_from = share, values_from = values)
+head(tidy_raceByCity)</code></pre>
+<pre><code>## # A tibble: 6 x 7
+##   Geographic.area City  share_white share_black share_native_am… share_asian
+##   &lt;chr&gt;           &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;            &lt;chr&gt;      
+## 1 AL              Aban… 67.2        30.2        0                0          
+## 2 AL              Abbe… 54.4        41.4        0.1              1          
+## 3 AL              Adam… 52.3        44.9        0.5              0.3        
+## 4 AL              Addi… 99.1        0.1         0                0.1        
+## 5 AL              Akro… 13.2        86.5        0                0          
+## 6 AL              Alab… 79.4        13.5        0.4              0.9        
+## # … with 1 more variable: share_hispanic &lt;chr&gt;</code></pre>
+<p>The Joining Process</p>
+<p>I joined the two datasets raceByCity and police_killings using a left_join. I joined them by state, city and share_black so that there wouldn’t be multiple observations for the same city and state.</p>
+<pre class="r"><code>tidy_raceByCity$Geographic.area = as.character(tidy_raceByCity$Geographic.area)
+tidy_raceByCity$share_black = as.double(tidy_raceByCity$share_black)</code></pre>
+<pre><code>## Warning: NAs introduced by coercion</code></pre>
+<pre class="r"><code>fulldata &lt;- tidy_police %&gt;% left_join(tidy_raceByCity, by=c(&#39;state&#39; = &#39;Geographic.area&#39;, &#39;city&#39; = &#39;City&#39;, &#39;share_black&#39; = &#39;share_black&#39;)) 
+head(fulldata)</code></pre>
+<pre><code>## # A tibble: 6 x 38
+##   name    age gender month   day  year streetaddress city  state latitude
+##   &lt;chr&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;
+## 1 A&#39;do…    16 Male   Febr…    23  2015 Clearview Ln  Mill… AL        32.5
+## 2 Aaro…    27 Male   April     2  2015 300 block Ir… Pine… LA        31.3
+## 3 Aaro…    26 Male   March    14  2015 22nd Ave and… Keno… WI        42.6
+## 4 Aaro…    25 Male   March    11  2015 3000 Seminol… Sout… CA        33.9
+## 5 Adam…    29 Male   March    19  2015 364 Hiwood A… Munr… OH        41.1
+## 6 Adam…    29 Male   March     7  2015 18th St and … Phoe… AZ        33.5
+## # … with 28 more variables: longitude &lt;dbl&gt;, state_fp &lt;int&gt;, county_fp &lt;int&gt;,
+## #   tract_ce &lt;int&gt;, geo_id &lt;dbl&gt;, county_id &lt;int&gt;, namelsad &lt;chr&gt;,
+## #   lawenforcementagency &lt;chr&gt;, cause &lt;chr&gt;, armed &lt;chr&gt;, pop &lt;int&gt;,
+## #   share_white.x &lt;dbl&gt;, share_black &lt;dbl&gt;, share_hispanic.x &lt;dbl&gt;,
+## #   p_income &lt;int&gt;, h_income &lt;int&gt;, county_income &lt;int&gt;, comp_income &lt;dbl&gt;,
+## #   county_bucket &lt;int&gt;, nat_bucket &lt;int&gt;, pov &lt;dbl&gt;, urate &lt;dbl&gt;,
+## #   college &lt;dbl&gt;, Race &lt;chr&gt;, share_white.y &lt;chr&gt;,
+## #   share_native_american &lt;chr&gt;, share_asian &lt;chr&gt;, share_hispanic.y &lt;chr&gt;</code></pre>
+<p>Summary Statistics</p>
+<pre class="r"><code>fulldata &lt;- fulldata %&gt;% mutate(relative_black = case_when(share_black &gt; 67 ~ &quot;high&quot;,
+                                              share_black &lt;= 66 &amp; 33 &lt;= share_black ~ &quot;med&quot;,
+                                              share_black &lt; 33 ~ &quot;low&quot;))
+head(fulldata)</code></pre>
+<pre><code>## # A tibble: 6 x 39
+##   name    age gender month   day  year streetaddress city  state latitude
+##   &lt;chr&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;
+## 1 A&#39;do…    16 Male   Febr…    23  2015 Clearview Ln  Mill… AL        32.5
+## 2 Aaro…    27 Male   April     2  2015 300 block Ir… Pine… LA        31.3
+## 3 Aaro…    26 Male   March    14  2015 22nd Ave and… Keno… WI        42.6
+## 4 Aaro…    25 Male   March    11  2015 3000 Seminol… Sout… CA        33.9
+## 5 Adam…    29 Male   March    19  2015 364 Hiwood A… Munr… OH        41.1
+## 6 Adam…    29 Male   March     7  2015 18th St and … Phoe… AZ        33.5
+## # … with 29 more variables: longitude &lt;dbl&gt;, state_fp &lt;int&gt;, county_fp &lt;int&gt;,
+## #   tract_ce &lt;int&gt;, geo_id &lt;dbl&gt;, county_id &lt;int&gt;, namelsad &lt;chr&gt;,
+## #   lawenforcementagency &lt;chr&gt;, cause &lt;chr&gt;, armed &lt;chr&gt;, pop &lt;int&gt;,
+## #   share_white.x &lt;dbl&gt;, share_black &lt;dbl&gt;, share_hispanic.x &lt;dbl&gt;,
+## #   p_income &lt;int&gt;, h_income &lt;int&gt;, county_income &lt;int&gt;, comp_income &lt;dbl&gt;,
+## #   county_bucket &lt;int&gt;, nat_bucket &lt;int&gt;, pov &lt;dbl&gt;, urate &lt;dbl&gt;,
+## #   college &lt;dbl&gt;, Race &lt;chr&gt;, share_white.y &lt;chr&gt;,
+## #   share_native_american &lt;chr&gt;, share_asian &lt;chr&gt;, share_hispanic.y &lt;chr&gt;,
+## #   relative_black &lt;chr&gt;</code></pre>
+<pre class="r"><code>fulldata = select(fulldata, -c(35:38))
+head(fulldata)</code></pre>
+<pre><code>## # A tibble: 6 x 35
+##   name    age gender month   day  year streetaddress city  state latitude
+##   &lt;chr&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;
+## 1 A&#39;do…    16 Male   Febr…    23  2015 Clearview Ln  Mill… AL        32.5
+## 2 Aaro…    27 Male   April     2  2015 300 block Ir… Pine… LA        31.3
+## 3 Aaro…    26 Male   March    14  2015 22nd Ave and… Keno… WI        42.6
+## 4 Aaro…    25 Male   March    11  2015 3000 Seminol… Sout… CA        33.9
+## 5 Adam…    29 Male   March    19  2015 364 Hiwood A… Munr… OH        41.1
+## 6 Adam…    29 Male   March     7  2015 18th St and … Phoe… AZ        33.5
+## # … with 25 more variables: longitude &lt;dbl&gt;, state_fp &lt;int&gt;, county_fp &lt;int&gt;,
+## #   tract_ce &lt;int&gt;, geo_id &lt;dbl&gt;, county_id &lt;int&gt;, namelsad &lt;chr&gt;,
+## #   lawenforcementagency &lt;chr&gt;, cause &lt;chr&gt;, armed &lt;chr&gt;, pop &lt;int&gt;,
+## #   share_white.x &lt;dbl&gt;, share_black &lt;dbl&gt;, share_hispanic.x &lt;dbl&gt;,
+## #   p_income &lt;int&gt;, h_income &lt;int&gt;, county_income &lt;int&gt;, comp_income &lt;dbl&gt;,
+## #   county_bucket &lt;int&gt;, nat_bucket &lt;int&gt;, pov &lt;dbl&gt;, urate &lt;dbl&gt;,
+## #   college &lt;dbl&gt;, Race &lt;chr&gt;, relative_black &lt;chr&gt;</code></pre>
+<pre class="r"><code>fulldata %&gt;% filter(state == &#39;AL&#39;)</code></pre>
+<pre><code>## # A tibble: 8 x 35
+##   name    age gender month   day  year streetaddress city  state latitude
+##   &lt;chr&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;
+## 1 A&#39;do…    16 Male   Febr…    23  2015 Clearview Ln  Mill… AL        32.5
+## 2 Anth…    36 Male   May      25  2015 1100 E Gatew… Hunt… AL        34.6
+## 3 Doug…    77 Male   March    27  2015 7901 1st Ave… Birm… AL        33.6
+## 4 Flet…    46 Male   Febr…    11  2015 Booger Hollo… Dade… AL        32.9
+## 5 Gilb…    54 Male   March    11  2015 Cliffs Landi… Bay … AL        30.9
+## 6 Shan…    39 Male   March    19  2015 1040 County … Moul… AL        34.6
+## 7 Stan…    38 Male   Febr…    20  2015 2200 Green S… Birm… AL        33.5
+## 8 Will…    53 Male   March    10  2015 700 Valley St Hoov… AL        33.4
+## # … with 25 more variables: longitude &lt;dbl&gt;, state_fp &lt;int&gt;, county_fp &lt;int&gt;,
+## #   tract_ce &lt;int&gt;, geo_id &lt;dbl&gt;, county_id &lt;int&gt;, namelsad &lt;chr&gt;,
+## #   lawenforcementagency &lt;chr&gt;, cause &lt;chr&gt;, armed &lt;chr&gt;, pop &lt;int&gt;,
+## #   share_white.x &lt;dbl&gt;, share_black &lt;dbl&gt;, share_hispanic.x &lt;dbl&gt;,
+## #   p_income &lt;int&gt;, h_income &lt;int&gt;, county_income &lt;int&gt;, comp_income &lt;dbl&gt;,
+## #   county_bucket &lt;int&gt;, nat_bucket &lt;int&gt;, pov &lt;dbl&gt;, urate &lt;dbl&gt;,
+## #   college &lt;dbl&gt;, Race &lt;chr&gt;, relative_black &lt;chr&gt;</code></pre>
+<pre class="r"><code># Summary statistics before grouping by state
+fulldata %&gt;% summarize(mean(age, na.rm=T), sd(age, na.rm = T), var(age, na.rm = T), n(), n_distinct(age), min(age), max(age))</code></pre>
+<pre><code>## # A tibble: 1 x 7
+##   `mean(age, na.r… `sd(age, na.rm … `var(age, na.rm… `n()` `n_distinct(age…
+##              &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt; &lt;int&gt;            &lt;int&gt;
+## 1             37.1             12.8             163.   410               58
+## # … with 2 more variables: `min(age)` &lt;int&gt;, `max(age)` &lt;int&gt;</code></pre>
+<pre class="r"><code>fulldata %&gt;% summarize(mean(share_black, na.rm=T), sd(share_black, na.rm = T), var(share_black, na.rm = T), n(), n_distinct(share_black), min(share_black), max(share_black))</code></pre>
+<pre><code>## # A tibble: 1 x 7
+##   `mean(share_bla… `sd(share_black… `var(share_blac… `n()` `n_distinct(sha…
+##              &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt; &lt;int&gt;            &lt;int&gt;
+## 1             18.3             25.1             631.   410              233
+## # … with 2 more variables: `min(share_black)` &lt;dbl&gt;, `max(share_black)` &lt;dbl&gt;</code></pre>
+<pre class="r"><code>fulldata %&gt;% summarize(mean(state_fp, na.rm=T), sd(state_fp, na.rm = T), var(state_fp, na.rm = T), n(), n_distinct(state_fp), min(state_fp), max(state_fp))</code></pre>
+<pre><code>## # A tibble: 1 x 7
+##   `mean(state_fp,… `sd(state_fp, n… `var(state_fp, … `n()` `n_distinct(sta…
+##              &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt; &lt;int&gt;            &lt;int&gt;
+## 1             25.1             16.8             282.   410               47
+## # … with 2 more variables: `min(state_fp)` &lt;int&gt;, `max(state_fp)` &lt;int&gt;</code></pre>
+<pre class="r"><code># Summary statistics after grouping by state
+fulldata %&gt;% group_by(state) %&gt;% summarize(mean(age, na.rm=T), sd(age, na.rm = T), var(age, na.rm = T), n(), n_distinct(age), min(age), max(age))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 47 x 8
+##    state `mean(age, na.r… `sd(age, na.rm … `var(age, na.rm… `n()`
+##    &lt;chr&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt; &lt;int&gt;
+##  1 AK                33               0                  0      2
+##  2 AL                44.9            17.6              311.     8
+##  3 AR                34               2.65               7      3
+##  4 AZ                36.5            11.7              136.    22
+##  5 CA                34.9            11.3              128.    69
+##  6 CO                35.1            16.6              275.    10
+##  7 CT                41              NA                 NA      1
+##  8 DC                35              NA                 NA      1
+##  9 DE                43.5            12.0              144.     2
+## 10 FL                36.3            12.9              166.    23
+## # … with 37 more rows, and 3 more variables: `n_distinct(age)` &lt;int&gt;,
+## #   `min(age)` &lt;int&gt;, `max(age)` &lt;int&gt;</code></pre>
+<pre class="r"><code>fulldata %&gt;% group_by(state) %&gt;% summarize(mean(share_black, na.rm=T), sd(share_black, na.rm = T), var(share_black, na.rm = T), n(), n_distinct(share_black), min(share_black), max(share_black))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 47 x 8
+##    state `mean(share_bla… `sd(share_black… `var(share_blac… `n()`
+##    &lt;chr&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt; &lt;int&gt;
+##  1 AK               11.4             0.424            0.180     2
+##  2 AL               23.0            25.2            634.        8
+##  3 AR               23.5            20.1            402.        3
+##  4 AZ                4.03            4.22            17.8      22
+##  5 CA                7.13           10.5            109.       69
+##  6 CO                9.84           14.3            205.       10
+##  7 CT                2.1            NA               NA         1
+##  8 DC                7.8            NA               NA         1
+##  9 DE               35.1            14.8            220.        2
+## 10 FL               30.6            31.2            976.       23
+## # … with 37 more rows, and 3 more variables: `n_distinct(share_black)` &lt;int&gt;,
+## #   `min(share_black)` &lt;dbl&gt;, `max(share_black)` &lt;dbl&gt;</code></pre>
+<pre class="r"><code>fulldata %&gt;% group_by(state) %&gt;% summarize(mean(state_fp, na.rm=T), sd(state_fp, na.rm = T), var(state_fp, na.rm = T), n(), n_distinct(state_fp), min(state_fp), max(state_fp))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 47 x 8
+##    state `mean(state_fp,… `sd(state_fp, n… `var(state_fp, … `n()`
+##    &lt;chr&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt; &lt;int&gt;
+##  1 AK                   2                0                0     2
+##  2 AL                   1                0                0     8
+##  3 AR                   5                0                0     3
+##  4 AZ                   4                0                0    22
+##  5 CA                   6                0                0    69
+##  6 CO                   8                0                0    10
+##  7 CT                   9               NA               NA     1
+##  8 DC                  11               NA               NA     1
+##  9 DE                  10                0                0     2
+## 10 FL                  12                0                0    23
+## # … with 37 more rows, and 3 more variables: `n_distinct(state_fp)` &lt;int&gt;,
+## #   `min(state_fp)` &lt;int&gt;, `max(state_fp)` &lt;int&gt;</code></pre>
+<pre class="r"><code>fulldata %&gt;% arrange(gender)</code></pre>
+<pre><code>## # A tibble: 410 x 35
+##    name    age gender month   day  year streetaddress city  state latitude
+##    &lt;chr&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;
+##  1 Alex…    25 Female April    30  2015 141 Pryor St… Atla… GA        33.8
+##  2 Alic…    24 Female March    17  2015 Van Ness Ave… San … CA        37.8
+##  3 Autu…    34 Female Janu…     6  2015 104 N Garfie… Burl… IA        40.8
+##  4 Bett…    43 Female Febr…    17  2015 2325 Union Rd Gast… NC        35.2
+##  5 Crys…    34 Female Febr…    26  2015 5101 Georgia… Moul… GA        31.1
+##  6 Dean…    53 Female March    26  2015 400 N Birch   Gard… KS        38.8
+##  7 Hue …    64 Female March     9  2015 E Kennedy St  Hack… NJ        40.9
+##  8 Jani…    20 Female Febr…    19  2015 Bellefonte Dr Char… NC        35.3
+##  9 Jess…    17 Female Janu…    26  2015 Newport St &amp;… Denv… CO        39.8
+## 10 Kare…    46 Female April    23  2015 2661 Gravens… Seba… CA        38.4
+## # … with 400 more rows, and 25 more variables: longitude &lt;dbl&gt;, state_fp &lt;int&gt;,
+## #   county_fp &lt;int&gt;, tract_ce &lt;int&gt;, geo_id &lt;dbl&gt;, county_id &lt;int&gt;,
+## #   namelsad &lt;chr&gt;, lawenforcementagency &lt;chr&gt;, cause &lt;chr&gt;, armed &lt;chr&gt;,
+## #   pop &lt;int&gt;, share_white.x &lt;dbl&gt;, share_black &lt;dbl&gt;, share_hispanic.x &lt;dbl&gt;,
+## #   p_income &lt;int&gt;, h_income &lt;int&gt;, county_income &lt;int&gt;, comp_income &lt;dbl&gt;,
+## #   county_bucket &lt;int&gt;, nat_bucket &lt;int&gt;, pov &lt;dbl&gt;, urate &lt;dbl&gt;,
+## #   college &lt;dbl&gt;, Race &lt;chr&gt;, relative_black &lt;chr&gt;</code></pre>
+<pre class="r"><code># Interesting how there are only 20 rows of females in a dataset of 410 rows. </code></pre>
+<p>Summarizing the Data</p>
+<p>When wrangling the data, I first decided to mutate the dataset by creating a new column called relative_black. This column determined whether the percetage of blacks were in the high, medium or low range. I then used select to remove columns 35 to 38 because they had duplicated data. I then calculated all the summary statistics which are shown above for the state code (state_fp). Then I grouped by state for each of the three variables: age, share_black and state_fp and calculated the summary statistics based on these as well. Finally, I wanted to see how many female victims there were in comparison to male victims so I arranged the data by gender.</p>
+<p>Data Plots</p>
+<p>Plot 1: Heatmap</p>
+<pre class="r"><code>cormat &lt;- fulldata %&gt;% select(&#39;state_fp&#39;, &#39;pop&#39;:&#39;share_hispanic.x&#39;, &#39;county_income&#39;) %&gt;% cor(use = &#39;pair&#39;)
+cormat %&gt;% as.data.frame() %&gt;% rownames_to_column(&#39;var1&#39;) %&gt;% pivot_longer(-1, &#39;var2&#39;, values_to=&#39;Correlation&#39;) %&gt;% ggplot(aes(var1, var2, fill=Correlation)) + geom_tile() + scale_fill_gradient2(low=&quot;green&quot;,mid=&quot;blue&quot;,high=&quot;orange&quot;)+ #makes colors!
+geom_text(aes(label=round(Correlation,2)),color = &quot;white&quot;, size = 3)+ #overlays correlation values
+theme(axis.text.x = element_text(angle = 90, hjust = 1))+ #flips the x-axis labels
+coord_fixed()</code></pre>
+<p><img src="/project/project1_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+This correlation heatmap examines the correlation between 6 variables. In addition to the percentage of various races in each state, it looks at the county income and the county population. The highest positive correlation is between the share_white.x and the state_fp, which corresponds to the state code.</p>
+<p>Plot 2</p>
+<pre class="r"><code>fulldata %&gt;% group_by(state) %&gt;% summarize(`Percent Black` = mean(share_black, na.rm=T)) %&gt;% ggplot(aes(state, `Percent Black`, fill = state)) + geom_bar(stat=&#39;identity&#39;)</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<p><img src="/project/project1_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+This plot shows the relationship between the percentage of African Americans in each state where there have been police shootings resulting in death. After expanding the graph, it can be seen that the state with the highest percentage of African Americans is Maryland. In the following plot I will be examining the relationship of the number of deaths per state to see if there is a correlation between the percentage of African Americans in each state and the number of shootings.</p>
+<p>Plot 3</p>
+<pre class="r"><code>fulldata %&gt;% count(state)</code></pre>
+<pre><code>## # A tibble: 47 x 2
+##    state     n
+##    &lt;chr&gt; &lt;int&gt;
+##  1 AK        2
+##  2 AL        8
+##  3 AR        3
+##  4 AZ       22
+##  5 CA       69
+##  6 CO       10
+##  7 CT        1
+##  8 DC        1
+##  9 DE        2
+## 10 FL       23
+## # … with 37 more rows</code></pre>
+<pre class="r"><code>death_per_state &lt;- fulldata %&gt;% count(state) %&gt;% as.data.frame()
+ggplot(death_per_state, aes(state, n)) + geom_point(stat= &#39;summary&#39;, color = &#39;orange&#39;)</code></pre>
+<pre><code>## No summary function supplied, defaulting to `mean_se()`</code></pre>
+<p><img src="/project/project1_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+This plot is relatively simple compared to the others. It takes a look at the number of shootings in each state and can be compared to the above plot which looks at the percentage of African Americans in each state. I expected there to be a higher number of shootings in one of the states which had the highest percentage of African Americans, however, based on this plot, the two states with the most shootings were California and Texas. Likely the correlation has more to do with population rather than percentage of African Americans.</p>
+<p>Dimensionality Reduction: Clustering Plots</p>
+<p>Plot 1</p>
+<pre class="r"><code>set.seed(348)
+clust_dat1&lt;-fulldata%&gt;%dplyr::select(share_black,state_fp) %&gt;% as.data.frame()
+head(clust_dat1)</code></pre>
+<pre><code>##   share_black state_fp
+## 1        30.5        1
+## 2        36.2       22
+## 3         7.7       55
+## 4         0.6        6
+## 5         1.4       39
+## 6         7.7        4</code></pre>
+<pre class="r"><code>kmeans1 &lt;- clust_dat1%&gt;%kmeans(3)
+head(kmeans1)</code></pre>
+<pre><code>## $cluster
+##   [1] 2 2 3 2 3 2 2 2 3 3 2 2 2 2 3 1 3 2 2 2 3 2 2 3 3 3 2 2 3 2 1 1 2 2 3 2 2
+##  [38] 2 3 1 2 3 2 2 2 3 1 3 3 2 2 1 3 2 2 3 2 1 2 3 2 2 2 2 2 2 1 1 3 2 1 3 2 2
+##  [75] 3 2 3 3 3 3 3 2 1 1 1 3 2 3 2 3 2 1 1 3 1 1 2 2 2 3 2 3 3 3 3 3 3 1 2 2 2
+## [112] 2 3 1 1 3 2 3 1 1 3 2 2 2 1 3 2 1 3 3 1 2 3 1 2 1 2 3 3 2 3 2 3 3 2 2 2 3
+## [149] 3 1 3 2 2 3 3 1 1 2 2 3 3 2 2 2 3 2 2 2 3 2 3 2 3 3 1 1 2 2 3 2 1 3 3 3 1
+## [186] 3 2 3 1 3 1 2 1 3 3 3 1 2 2 1 2 3 2 2 3 2 3 3 3 3 1 3 2 3 3 3 3 2 2 2 2 3
+## [223] 3 2 2 3 3 2 2 3 2 2 3 2 2 2 2 2 2 3 2 1 2 3 2 2 3 2 1 2 2 2 2 3 3 3 3 3 2
+## [260] 1 1 1 3 3 1 3 3 3 2 2 2 1 1 3 1 3 3 2 3 3 2 2 3 2 2 3 2 2 2 2 2 1 3 3 2 3
+## [297] 1 3 2 2 3 3 2 3 3 2 3 2 2 2 2 1 2 3 3 3 1 2 2 2 2 2 2 3 2 3 3 2 3 3 3 1 3
+## [334] 3 3 3 3 3 2 3 2 3 3 3 2 3 2 2 2 1 3 2 3 1 3 3 3 2 2 3 2 3 3 2 3 2 2 2 2 3
+## [371] 2 2 3 2 2 2 3 3 3 3 1 1 3 2 3 1 1 1 1 3 2 3 3 2 2 2 3 3 3 3 3 2 3 3 1 2 1
+## [408] 3 3 2
+## 
+## $centers
+##   share_black  state_fp
+## 1   69.979687 24.812500
+## 2    8.042938  9.553672
+## 3    9.558580 41.431953
+## 
+## $totss
+## [1] 373510.9
+## 
+## $withinss
+## [1] 33620.71 22101.13 27461.88
+## 
+## $tot.withinss
+## [1] 83183.72
+## 
+## $betweenss
+## [1] 290327.1</code></pre>
+<pre class="r"><code>kmeansclust &lt;- clust_dat1 %&gt;% mutate(cluster=as.factor(kmeans1$cluster)) 
+
+kmeansclust%&gt;%ggplot(aes(state_fp, share_black,color=cluster))+geom_point() </code></pre>
+<p><img src="/project/project1_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>Plot 2</p>
+<pre class="r"><code>clust_dat2&lt;-fulldata%&gt;%dplyr::select(age,state_fp) %&gt;% as.data.frame()
+head(clust_dat2)</code></pre>
+<pre><code>##   age state_fp
+## 1  16        1
+## 2  27       22
+## 3  26       55
+## 4  25        6
+## 5  29       39
+## 6  29        4</code></pre>
+<pre class="r"><code>kmeans2 &lt;- clust_dat2%&gt;%kmeans(3)
+head(kmeans2)</code></pre>
+<pre><code>## $cluster
+##   [1] 3 3 1 3 1 3 3 3 1 3 2 3 3 3 1 3 1 3 2 3 1 3 3 1 1 2 3 2 1 3 2 1 3 3 1 3 3
+##  [38] 3 1 3 3 1 3 3 3 1 2 1 1 3 2 1 1 3 3 1 3 3 3 1 2 3 3 3 2 2 3 3 1 3 3 1 3 3
+##  [75] 1 3 1 1 1 1 1 3 3 3 2 1 2 1 2 1 3 1 3 1 3 3 2 3 3 1 3 1 3 2 1 2 2 2 3 2 3
+## [112] 2 1 2 3 1 3 1 1 3 3 3 3 3 3 1 3 1 2 1 3 3 1 2 3 2 3 1 1 3 1 3 1 1 3 2 3 1
+## [149] 1 3 1 3 3 1 1 2 3 3 2 1 2 2 2 2 1 3 3 3 1 3 1 2 2 1 1 3 3 3 3 3 2 1 1 1 1
+## [186] 2 3 1 3 1 1 3 3 1 1 1 3 3 3 3 2 1 2 3 1 3 1 1 1 1 3 1 3 1 2 2 1 3 3 3 3 1
+## [223] 1 3 3 1 1 3 3 1 3 2 1 3 2 3 3 3 3 3 3 3 3 2 3 2 1 2 3 3 2 2 2 1 1 1 3 1 3
+## [260] 3 3 1 2 1 3 1 1 2 3 3 3 3 3 1 1 2 1 3 1 1 3 3 1 3 3 3 3 3 2 3 3 2 1 1 3 1
+## [297] 3 1 3 3 1 1 3 1 1 3 1 3 3 3 3 3 3 1 1 1 3 3 3 3 3 2 2 1 3 1 1 3 1 3 1 3 2
+## [334] 1 2 1 1 1 3 1 3 2 1 1 2 1 3 3 3 2 1 3 1 2 1 1 1 3 3 1 3 3 1 2 3 3 3 3 3 1
+## [371] 3 3 2 3 2 3 1 2 1 2 1 3 1 3 1 3 3 2 1 1 3 1 1 3 3 3 1 1 1 1 1 3 2 1 1 2 1
+## [408] 1 2 3
+## 
+## $centers
+##        age state_fp
+## 1 35.77483 43.47020
+## 2 56.75362 21.40580
+## 3 30.98421 11.78947
+## 
+## $totss
+## [1] 181940.7
+## 
+## $withinss
+## [1] 22717.96 17255.45 22382.53
+## 
+## $tot.withinss
+## [1] 62355.94
+## 
+## $betweenss
+## [1] 119584.7</code></pre>
+<pre class="r"><code>kmeansclust2 &lt;- clust_dat2 %&gt;% mutate(cluster=as.factor(kmeans2$cluster)) #save the cluster solution in your dataset
+
+kmeansclust2 %&gt;%ggplot(aes(state_fp, age,color=cluster))+geom_point() #vizualize it</code></pre>
+<p><img src="/project/project1_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Plot 3</p>
+<pre class="r"><code>clust_dat3&lt;-fulldata%&gt;%dplyr::select(college,state_fp) %&gt;% as.data.frame()
+head(clust_dat3)</code></pre>
+<pre><code>##      college state_fp
+## 1 0.16850951        1
+## 2 0.11140236       22
+## 3 0.14731227       55
+## 4 0.05013293        6
+## 5 0.40395421       39
+## 6 0.10295519        4</code></pre>
+<pre class="r"><code>library(cluster)
+pam1&lt;-clust_dat3%&gt;%pam(k=3)
+head(pam1)</code></pre>
+<pre><code>## $medoids
+##        college state_fp
+## [1,] 0.1656260        6
+## [2,] 0.2064446       27
+## [3,] 0.1700814       48
+## 
+## $id.med
+## [1] 111 373 342
+## 
+## $clustering
+##   [1] 1 2 3 1 3 1 1 1 3 2 1 1 2 2 3 1 3 1 1 1 2 2 1 3 3 2 1 1 3 1 2 3 1 1 3 1 1
+##  [38] 1 3 1 1 3 1 2 1 3 1 2 2 1 1 3 3 1 1 3 1 1 2 3 1 2 1 1 1 1 2 1 3 1 1 3 2 1
+##  [75] 3 1 3 3 3 3 2 1 1 2 2 3 1 3 1 2 1 2 2 3 2 2 1 1 1 3 1 2 2 3 3 3 2 2 1 1 1
+## [112] 2 2 2 1 2 1 2 3 2 2 1 1 1 1 3 2 2 2 3 2 2 3 1 1 2 1 3 2 1 3 1 3 3 1 1 1 2
+## [149] 3 2 2 1 1 2 3 2 2 1 1 3 3 1 2 1 3 1 2 1 3 1 3 2 2 3 2 2 2 1 2 1 2 3 3 2 3
+## [186] 2 1 3 2 3 2 1 2 2 2 2 2 1 1 2 2 3 1 1 3 1 3 3 3 3 1 3 1 3 2 2 2 2 1 1 1 3
+## [223] 2 1 1 3 3 1 1 3 2 1 3 1 1 1 1 2 1 2 1 2 1 2 1 1 3 1 1 1 2 1 2 2 3 3 2 3 1
+## [260] 1 2 3 2 3 2 2 3 2 1 1 1 2 2 2 3 2 3 2 3 3 1 1 3 1 1 2 1 1 2 1 2 2 2 2 1 3
+## [297] 1 2 1 1 3 3 1 3 3 1 3 2 2 1 2 1 1 3 3 2 2 1 1 1 1 2 1 3 1 3 3 1 2 2 3 2 2
+## [334] 3 3 3 3 3 2 3 1 3 3 3 2 3 1 1 1 2 3 1 3 2 3 3 3 1 1 2 1 2 3 1 2 1 1 2 1 2
+## [371] 1 1 2 1 1 1 3 2 3 2 3 2 3 2 3 1 2 3 2 3 1 2 2 1 1 2 3 3 2 3 3 1 2 3 3 1 3
+## [408] 3 2 1
+## 
+## $objective
+##    build     swap 
+## 4.019365 3.986500 
+## 
+## $isolation
+##  1  2  3 
+## no no no 
+## Levels: no L L*
+## 
+## $clusinfo
+##      size  max_diss  av_diss diameter separation
+## [1,]  160 10.000516 2.681685 15.00536   1.000105
+## [2,]  130 10.005124 5.676448 20.00625   1.000105
+## [3,]  120  9.003038 3.895476 17.00108   2.000001</code></pre>
+<pre class="r"><code>pamclust&lt;-clust_dat3%&gt;%mutate(cluster=as.factor(pam1$clustering)) #save the cluster solution in your dataset
+pamclust%&gt;%ggplot(aes(state_fp, college, color=cluster))+geom_point() #visualize it</code></pre>
+<p><img src="/project/project1_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>Dimensionality Reduction Summary</p>
+<p>The first plot uses k-means clustering to form three clusters of the share_black values. The clusters are plotted against the state_fp variable which is the state code. Three clusters were chosen because it minimized the difference between the variance of the values. The second plot displays three clusters of the various ages of the gunshot victims. The ages ranged from 16 to 87 and are plotted against the state code once again. As one can tell, the mix of ages were relatively similar across all 50 states. The third plot maps the college attendance rates across each state. It contains three clusters which also indicate that college attendance rates were relatively similar across the 50 states with a few outliers in each cluster category.</p>
+<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="/js/docs.min.js"></script>
+<script src="/js/main.js"></script>
+
+<script src="/js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>
