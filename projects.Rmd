@@ -9,7 +9,7 @@ hidediscus: true
 Check out some of my coding projects below:
 
 
-<i class="fa fa-signal"></i> &nbsp; [Wrangling & Exploratory Data Analysis](http://127.0.0.1:4321/project/project1/)
+<i class="fa fa-signal"></i> &nbsp; [Wrangling & Exploratory Data Analysis](/project/project1/)
 
 <i class="fa fa-line-chart"></i> &nbsp; [Modeling, Inference, Prediction](/project/project2/)
 
