@@ -1,0 +1,21 @@
+---
+title: Test python post
+author: Mallika Singh
+date: '2020-12-07'
+slug: test-python-post
+categories: []
+tags: []
+description: ''
+---
+
+# Heading of my post!
+
+Content of my post!
+
+#Subheading
+
+More content
+
+```{python}
+print('hello, I am printing this using python')
+```
